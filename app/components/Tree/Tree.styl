@@ -1,0 +1,57 @@
+@import '../mixins.styl'
+json('../variables.json')
+
+.main
+    overflow: auto;
+
+.loadingPanel
+    height: 100%
+
+.loading
+    width: 100%
+    &.fullHeight
+        height: 100%
+
+
+.columns
+    display: flex
+    height: 100%
+
+.column
+    border-right: 1px solid c-main
+    overflow: auto
+    min-width: 200px
+    +max-width(800px)
+        display: none
+    &:last-child
+        border-right: 0
+        +max-width(800px)
+            display: block
+            width: 100%
+
+.item
+    line-height: 30px;
+    padding: 0 10px;
+    cursor: pointer;
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
+    margin-right: -1px
+    &:hover
+        background-color: hover-background-color;
+    &.isActive
+        background-color: c-main
+        color: c-white
+        cursor: default
+        .arrowSvg
+            fill: c-white
+
+.arrow
+    box-sizing: border-box
+    float: right
+    width: 30px
+    height: 30px
+    padding: 3px
+    margin-right: -10px
+    .arrowSvg
+        fill: c-main

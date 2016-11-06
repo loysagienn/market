@@ -1,0 +1,22 @@
+@import '../mixins.styl'
+json('../variables.json')
+
+.main
+    display: block
+    padding: 10px
+    shadow: default
+    border-radius: 3px
+    text-decoration: none
+    background-color: c-white
+    color: c-gray-40
+    &.color
+        background-color: c-main;
+        color: white;
+
+.canClick
+    cursor: pointer
+    &:hover
+        background-color: c-hover;
+    &:active
+        shadow: hover
+        transform: translate(0, -1px)

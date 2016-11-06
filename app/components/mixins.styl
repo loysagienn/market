@@ -1,0 +1,28 @@
+
+rotation(interval = 1s)
+    :global {
+        animation: rotation interval infinite linear
+    }
+
+user-select()
+    -webkit-user-select: arguments
+    user-select: arguments
+
+max-width(width)
+    @media all and (max-width: width)
+        {block}
+
+max-height(height)
+    @media all and (max-height: height)
+        {block}
+
+shadow(type = default)
+    if type == hover
+        box-shadow: 0 2px 5px 0 rgba(0,0,0,0.4)
+    else if type == none
+        box-shadow: none
+    else
+        box-shadow: 0 1px 2px 0 rgba(0,0,0,0.5)
+
+gradient(angle, firstColor, lastColor)
+    background: linear-gradient(angle, firstColor, lastColor);

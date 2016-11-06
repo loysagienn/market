@@ -1,0 +1,19 @@
+@import '../mixins.styl'
+json('../variables.json')
+
+.main
+    padding: 15px 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+.item
+    margin: 0 2px;
+    padding: 3px 10px;
+    border: 1px solid c-white;
+    border-radius: 3px;
+    cursor: pointer;
+    background-color: c-white;
+    &.isActive
+        background-color: c-main;
+        color: c-white;

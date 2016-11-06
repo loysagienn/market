@@ -1,0 +1,43 @@
+@import '../mixins.styl'
+json('../variables.json')
+
+.button
+    display: inline-block
+    padding: 5px 15px
+    border-radius: 3px
+    text-align: center
+    cursor: pointer
+    user-select(none)
+
+.themeDefault
+    background-color: c-main
+    color: c-white
+
+    &:hover
+        background-color: c-main + #101010
+
+    &:active
+        shadow: hover
+        transform: translate(0, -1px)
+
+    &.disabled
+        background-color: c-gray-c0
+        cursor: default
+        shadow: none
+        transform: none
+
+.themeTransparent
+
+    &:hover
+        background-color: hover-background-color
+
+    &:active
+        shadow: hover
+        transform: translate(0, -1px)
+
+    &.disabled
+        background-color: transparent
+        color: c-gray-c0
+        cursor: default
+        shadow: none
+        transform: none

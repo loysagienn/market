@@ -1,0 +1,44 @@
+@import '../mixins.styl'
+json('../variables.json')
+
+.main
+    position: absolute
+    left: 5px
+    right: 5px
+    top: 0
+    bottom: 0
+    display: flex
+    justify-content: flex-start
+    overflow: hidden
+    +max-width(800px)
+        justify-content: center
+
+.items
+    height: 100%
+
+.item
+    float: right
+    height: 100%
+    &:not(:first-child)
+        +max-width(800px)
+            display: none;
+
+.name
+    display: inline-block
+    height: 100%
+    padding: 0 5px
+    white-space: nowrap
+    cursor: pointer
+    &:hover
+        background-color: hover-background-color
+
+.delimiter
+    float: right
+    display: flex
+    height: 100%
+    align-items: center
+    margin: 0 -3px;
+
+.delimiterSvg
+    width: 20px
+    height: 20px

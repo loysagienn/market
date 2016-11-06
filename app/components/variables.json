@@ -1,0 +1,25 @@
+{
+  "c-text": "#404040",
+  "c-main": "#009688",
+  "c-main-200": "#80CBC4",
+  "c-main-400": "#26A69A",
+  "c-main-700": "#00796B",
+  "c-main-text": "#00897b",
+  "c-special": "#9C27B0",
+  "c-special-400": "#AB47BC",
+  "c-white": "#ffffff",
+  "c-black": "#000000",
+  "c-gray-c0": "#c0c0c0",
+  "c-gray-40": "#404040",
+  "c-hover": "#f8f8f8",
+  "hover-background-color": "rgba(0,0,0,0.05)",
+
+  "fs-normal": "14px",
+  "fs-big": "20px",
+  "fs-smaller": "13px",
+  "fs-little": "12px",
+
+  "header-z-index": "10",
+  "tree-z-index": "5",
+  "popup-z-index": "20"
+}
