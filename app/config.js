@@ -1,2 +1,4 @@
 
-module.exports = require('../config');
+import config from '../config';
+
+export default config;

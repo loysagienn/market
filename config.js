@@ -12,7 +12,7 @@ module.exports = process.env.NODE_ENV === 'development'
 {
     privateConfig,
     isDevMode:        true,
-    staticDir:        path.join(__dirname, '../../public'),
+    staticDir:        path.join(__dirname, '../NodeServer/public'),
     babelPolyfillUrl: '/vendor/babel-polyfill.js',
     reactUrl:         '/vendor/react.js',
     reactDomUrl:      '/vendor/react-dom.js',

@@ -1,6 +1,5 @@
 const gulp = require('gulp');
 const babel = require('gulp-babel');
-const log = require('../../../log')(module, { console: true });
 
 
 const src = {
@@ -29,6 +28,6 @@ gulp.task('watch-js', () =>
 
 
 function handleError(err) {
-    log.error(err);
+    console.error(err);
     this.end();
 }
