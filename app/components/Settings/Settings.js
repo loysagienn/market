@@ -1,5 +1,17 @@
 import React, {Component} from 'react';
 import style from './buildCssMap';
+import {Checkbox} from '../';
+
+const settingsText = {
+    serverRenderingOn: {
+        title: 'Включить серверный рендеринг',
+        description: 'При первоначальной загрузке страница будет отрендерна на сервере'
+    },
+    preloadDataOnServer: {
+        title: 'Предзагружать данные для отображения страницы на сервере',
+        description: 'Все данные, необходимые для отображения текущей страницы, будут загружены на сервере и приедут на клиент вместе со страницей, в противном случае на клиент приедет "пустая страница" со спиннерами и все необходимые запросы будут отправлены уже с клиента'
+    }
+};
 
 export default class Settings extends Component {
     constructor(props) {
@@ -11,7 +23,33 @@ export default class Settings extends Component {
 
         return (
             <div className={style.main}>
-                settings
+                {
+                    Object.keys(settings).map(key => this._renderSettings(key, settings[key]))
+                }
+            </div>
+        );
+    }
+
+    _renderSettings(key, checked) {
+
+        const {title, description} = settingsText[key];
+        const {changeSettings} = this.props;
+
+        return (
+            <div
+                className={style.settings}
+                key={key}
+            >
+                <Checkbox
+                    checked={checked}
+                    theme="white"
+                    className={style.checkbox}
+                    onClick={event => changeSettings({[key]: !checked})}
+                />
+                <div className={style.text}>
+                    <div className={style.title}>{title}</div>
+                    <div className={style.description}>{description}</div>
+                </div>
             </div>
         )
     }

@@ -2,7 +2,7 @@ import {createLogger, setLogger} from '../common/logger';
 
 setLogger((module, options) => {
     return {
-        info: console.log.bind(console, '%cinfo: ', 'color: green;'),
+        info: console.log.bind(console, '%cinfo: ', 'color: #009688;'),
         error: console.log.bind(console, '%cerror: ', 'color: red;'),
         custom: custom
     };

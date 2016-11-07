@@ -12,6 +12,7 @@ import {marketApiMethods} from '../../common/router/router';
 import {renderToString} from 'react-dom/server';
 import api from '../api/api';
 import {createLogger} from '../logger';
+import {DEFAULT_SETTINGS} from '../../common/constants';
 
 const log = createLogger(module, {console: true});
 
@@ -19,6 +20,12 @@ const log = createLogger(module, {console: true});
 export default function configurePage(route, req) {
 
     return new Promise(resolve => {
+
+        const {serverRenderingOn, preloadDataOnServer} = getSettings(req);
+
+        if (!serverRenderingOn && !preloadDataOnServer) {
+            return resolve();
+        }
 
         const store = createStore(reducers, {api: createPageApi(req)}, applyMiddleware(batchThunk, crashReporter));
 
@@ -31,27 +38,32 @@ export default function configurePage(route, req) {
             }
 
             let html = '';
-            let initialState = {};
+            let initialState = getState();
 
-            try {
-                initialState = getState();
-                html = renderToString(
-                    createElement(
-                        Provider,
-                        {store},
-                        createElement(App)
-                    )
-                );
-            } catch (error) {
-                log.error(error);
+            if (serverRenderingOn) {
+                try {
+                    html = renderToString(
+                        createElement(
+                            Provider,
+                            {store},
+                            createElement(App)
+                        )
+                    );
+                } catch (error) {
+                    log.error('render page on server error', error);
+                }
             }
 
             resolve({html, initialState});
         };
 
-        dispatch(routeTo({route}));
+        if (preloadDataOnServer) {
+            dispatch(routeTo({route}));
+            subscribe(() => resolvePage());
+        } else {
+            resolvePage();
+        }
 
-        subscribe(() => resolvePage());
     })
 }
 
@@ -68,4 +80,16 @@ function createPageApi(req) {
     }, {}));
 
     return pageApi;
+}
+
+function getSettings({cookies: {settings} = {}}) {
+    if (!settings) {
+        return DEFAULT_SETTINGS;
+    }
+
+    try {
+        return JSON.parse(settings);
+    } catch (error) {
+        return DEFAULT_SETTINGS;
+    }
 }

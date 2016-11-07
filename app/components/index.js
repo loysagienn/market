@@ -18,4 +18,5 @@ export {default as ModelTile} from './ModelTile/ModelTile';
 export {default as PageNotFound} from './PageNotFound/PageNotFound';
 export {default as PageSwitcher} from './PageSwitcher/PageSwitcher';
 export {default as Model} from './Model/Model';
+export {default as Checkbox} from './Checkbox/Checkbox';
 export * from './Svg/Svg';

@@ -45,12 +45,13 @@ export default class Header extends Component {
 
         return (
             <Tile className={style.menuTile}>
-                <div
+                <a
                     className={style.menuItem}
-                    onMouseDown={event => routeTo({path: '/'})}
+                    href="https://github.com/loysagienn/market"
+                    target="_blank"
                 >
-                    Главная страница
-                </div>
+                    Github
+                </a>
                 <div
                     className={style.menuItem}
                     onMouseDown={event => routeTo({path: '/settings'})}

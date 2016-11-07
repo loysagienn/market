@@ -1,5 +1,5 @@
 
-import {SETTINGS_COOKIE_NAME} from '../common/constants';
+import {SETTINGS_COOKIE_NAME, DEFAULT_SETTINGS} from '../common/constants';
 
 
 export function getSettingsFromCookie() {
@@ -10,7 +10,8 @@ export function getSettingsFromCookie() {
     }
 
     try {
-        return JSON.parse(settingsStr);
+        const settings = JSON.parse(settingsStr);
+        return Object.assign(DEFAULT_SETTINGS, settings);
     } catch (error) {
         return;
     }
