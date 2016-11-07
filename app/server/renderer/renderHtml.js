@@ -27,7 +27,6 @@ export default function renderHtml({html = '', initialState = {}} = {}) {
 <script>
     window.__INITIAL_STATE__ = ${initialStateString};
 </script>
-<script src = "${config.babelPolyfillUrl}"></script>
 <script src = "${config.reduxUrl}"></script>
 <script src = "${config.reactUrl}"></script>
 <script src = "${config.reactDomUrl}"></script>

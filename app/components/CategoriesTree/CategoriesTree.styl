@@ -10,9 +10,6 @@ json('../variables.json')
     bottom: 0
     height: 50px
     &.treeOpened
-        .list
-            +maxWidth(800px)
-                left: 50px;
         .backBtn
             +maxWidth(800px)
                 display: flex;
@@ -26,6 +23,8 @@ json('../variables.json')
     line-height: 50px
     background-color: c-white
     z-index: list-z-index
+    +maxWidth(800px)
+        left: 50px;
 
 .backBtn
     display: none;
@@ -51,7 +50,10 @@ json('../variables.json')
     z-index: tree-z-index
     shadow: default
     background-color: c-white
-    +max-height(450px)
+    +maxWidth(800px)
+        height: auto;
+        bottom: 0;
+    +maxHeight(450px)
         height: auto;
         bottom: 0;
     .treeComponent

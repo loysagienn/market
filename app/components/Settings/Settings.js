@@ -38,13 +38,13 @@ export default class Settings extends Component {
         return (
             <div
                 className={style.settings}
+                onClick={event => changeSettings({[key]: !checked})}
                 key={key}
             >
                 <Checkbox
                     checked={checked}
                     theme="white"
                     className={style.checkbox}
-                    onClick={event => changeSettings({[key]: !checked})}
                 />
                 <div className={style.text}>
                     <div className={style.title}>{title}</div>
