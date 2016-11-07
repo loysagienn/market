@@ -25,7 +25,7 @@ module.exports = process.env.NODE_ENV === 'development'
 {
     privateConfig,
     isProdMode:       true,
-    staticDir:        path.join(__dirname, '../../public'),
+    staticDir:        path.join(__dirname, '../NodeServer/public'),
     babelPolyfillUrl: 'https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.8.0/polyfill.min.js',
     reactUrl:         'https://cdnjs.cloudflare.com/ajax/libs/react/15.0.2/react.min.js',
     reactDomUrl:      'https://cdnjs.cloudflare.com/ajax/libs/react/15.0.2/react-dom.min.js',
