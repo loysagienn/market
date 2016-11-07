@@ -1,6 +1,6 @@
 import React from 'react';
 import style from './buildCssMap';
-import {CategoriesTree, IndexPage, ModelList, PageNotFound, Model, Settings} from '../';
+import {Header, IndexPage, ModelList, PageNotFound, Model, Settings} from '../';
 import {routeKeys} from '../../common/router/router';
 import {createLogger} from '../../common/logger';
 
@@ -14,7 +14,9 @@ export default function({routeTo, route, models}) {
         <div
             className={style.main}
         >
-            <CategoriesTree/>
+            <Header
+                routeTo={routeTo}
+            />
             <div className={style.page}>
                 {
                     renderPage({route, models, routeTo})

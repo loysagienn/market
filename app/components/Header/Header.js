@@ -1,11 +1,77 @@
-import React from 'react';
+import React, {Component} from 'react';
 import style from './buildCssMap';
+import {CategoriesTree, SvgMenu, Tile, ShowHide} from '../';
 
-export default function() {
 
-    return (
-        <div className={style.main}>
-            Поиск товаров на Яндекс.Маркете
-        </div>
-    )
+export default class Header extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            menuVisible: false
+        }
+    }
+
+    _showMenu() {
+        this.setState({menuVisible: true});
+    }
+
+    _hideMenu() {
+        this.setState({menuVisible: false});
+    }
+
+    render() {
+
+        return (
+            <div className={style.main}>
+                <div className={style.categories}>
+                    <CategoriesTree/>
+                </div>
+                {this._renderMenuBtn()}
+                <ShowHide className={style.menu}>
+                    {this._renderMenu()}
+                </ShowHide>
+            </div>
+        )
+    }
+
+    _renderMenu() {
+
+        if (!this.state.menuVisible) {
+            return null;
+        }
+
+        const {routeTo} = this.props;
+
+        return (
+            <Tile className={style.menuTile}>
+                <div
+                    className={style.menuItem}
+                    onMouseDown={event => routeTo({path: '/'})}
+                >
+                    Главная страница
+                </div>
+                <div
+                    className={style.menuItem}
+                    onMouseDown={event => routeTo({path: '/settings'})}
+                >
+                    Настройки
+                </div>
+            </Tile>
+        )
+    }
+
+    _renderMenuBtn() {
+
+        return (
+            <div
+                tabIndex="0"
+                className={style.menuBtn}
+                onFocus={event => this._showMenu()}
+                onBlur={event => this._hideMenu()}
+            >
+                <SvgMenu className={style.menuBtnSvg}/>
+            </div>
+        )
+    }
 }

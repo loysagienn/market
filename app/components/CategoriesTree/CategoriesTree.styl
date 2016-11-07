@@ -9,8 +9,6 @@ json('../variables.json')
     top: 0
     bottom: 0
     height: 50px
-    border-bottom: 1px solid c-main
-    shadow: default
     &.treeOpened
         .list
             +max-width(800px)
@@ -24,9 +22,11 @@ json('../variables.json')
     left: 0
     right: 0
     top: 0
-    height: 49px
-    line-height: 49px
+    height: 50px
+    line-height: 50px
+    background-color: c-white
     font-size: fs-smaller
+    z-index: list-z-index
 
 .backBtn
     display: none;
@@ -34,7 +34,7 @@ json('../variables.json')
     left: 0;
     top: 0;
     width: 50px;
-    height: 49px;
+    height: 50px;
     box-sizing: border-box;
     justify-content: center;
     align-items: center;
@@ -46,11 +46,13 @@ json('../variables.json')
     left: 0
     right: 0
     top: 50px
-    height: 350px
+    height: 400px
+    box-sizing: border-box;
+    border-top: 1px solid c-main;
     z-index: tree-z-index
-    shadow: hover
+    shadow: default
     background-color: c-white
-    +max-height(400px)
+    +max-height(450px)
         height: auto;
         bottom: 0;
     .treeComponent

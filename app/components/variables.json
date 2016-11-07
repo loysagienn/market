@@ -19,7 +19,9 @@
   "fs-smaller": "13px",
   "fs-little": "12px",
 
-  "header-z-index": "10",
+  "list-z-index": "10",
+  "header-z-index": "3",
   "tree-z-index": "5",
-  "popup-z-index": "20"
+  "popup-z-index": "1000",
+  "menu-z-index": "15"
 }

@@ -6,9 +6,50 @@ json('../variables.json')
     left: 0
     right: 0
     top: 0
-    padding: 0 10px
+    box-sizing: border-box
     height: 50px
-    line-height: 50px
     z-index: header-z-index
-    background-color: c-main
-    color: c-white
+    shadow: default
+
+.categories
+    position: absolute
+    left: 0;
+    right: 50px;
+    top: 0;
+    bottom: 0;
+
+.menuBtn
+    position: absolute
+    top: 0;
+    right: 0;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    outline: 0;
+    &:hover
+        background-color: hover-background-color
+    &:focus
+        background-color: hover-background-color
+    .menuBtnSvg
+        fill: c-main;
+
+.menu
+    position: absolute;
+    top: 50px;
+    right: 0;
+    z-index: menu-z-index;
+
+.menuTile
+    min-width: 150px;
+    padding: 3px 0;
+
+.menuItem
+    padding: 0 10px;
+    line-height: 30px;
+    cursor: pointer;
+    &:hover
+        background-color: hover-background-color
