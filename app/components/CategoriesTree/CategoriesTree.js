@@ -60,7 +60,7 @@ export default class CategoriesTree extends Component {
 
         const focusedCategory = categoriesMap[focusedCategoryId];
 
-        if (focusedCategory.childrenCount > 0 && !focusedCategory.childrenLoaded) {
+        if (focusedCategory && focusedCategory.childrenCount > 0 && !focusedCategory.childrenLoaded) {
             focusToCategory(focusedCategoryId);
         }
 
@@ -266,7 +266,7 @@ export default class CategoriesTree extends Component {
 
         if (this.props.loading) {
             return (
-                <div className={style.emptyPlaceholderLoading}>
+                <div className={style.loading}>
                     <SvgLoading/>
                 </div>
             );

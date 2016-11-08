@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import style from './buildCssMap';
-import {Loading, ModelTile} from '../';
+import {Loading, ModelTile, SvgLoading} from '../';
 
 
 
@@ -50,8 +50,25 @@ export default class ModelList extends Component {
                         []
                     )
                 }
+                {
+                    this._renderMoreLoadingSpinner()
+                }
             </div>
         );
+    }
+
+    _renderMoreLoadingSpinner() {
+        const {loading} = this.props;
+
+        if (!loading) {
+            return null;
+        }
+
+        return (
+            <div className={style.moreLoading}>
+                <SvgLoading className={style.loadingSvg}/>
+            </div>
+        )
     }
 }
 
