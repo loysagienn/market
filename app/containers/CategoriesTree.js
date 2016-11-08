@@ -2,12 +2,16 @@ import {connect} from 'react-redux';
 import {routeTo, focusToCategory} from '../actions/actions';
 import CategoriesTree from '../components/CategoriesTree/CategoriesTree';
 
-function mapStateToProps({categories: {loading, categoriesMap, focusedCategoryId, filterCategoryId}}) {
+function mapStateToProps({
+    categories: {loading, categoriesMap, focusedCategoryId, filterCategoryId},
+    settings: {showCategoryTreeOnHover}
+}) {
     return {
         filterCategoryId,
         focusedCategoryId,
         loading,
-        categoriesMap
+        categoriesMap,
+        showCategoryTreeOnHover
     };
 }
 

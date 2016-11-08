@@ -10,6 +10,9 @@ const settingsText = {
     preloadDataOnServer: {
         title: 'Предзагружать данные для отображения страницы на сервере',
         description: 'Все данные, необходимые для отображения текущей страницы, будут загружены на сервере и приедут на клиент вместе со страницей, в противном случае на клиент приедет "пустая страница" со спиннерами и все необходимые запросы будут отправлены уже с клиента'
+    },
+    showCategoryTreeOnHover: {
+        title: 'Показывать дерево категорий при наведении на список'
     }
 };
 
@@ -48,7 +51,7 @@ export default class Settings extends Component {
                 />
                 <div className={style.text}>
                     <div className={style.title}>{title}</div>
-                    <div className={style.description}>{description}</div>
+                    {description && <div className={style.description}>{description}</div>}
                 </div>
             </div>
         )

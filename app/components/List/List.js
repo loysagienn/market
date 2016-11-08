@@ -39,8 +39,8 @@ function renderItem({id, name}, needDelimiter, delimiterType, routeTo) {
         >
             {needDelimiter ? renderDelimiter(delimiterType) : null}
             <div
-                className={style.name}
-                onClick={event => routeTo(id)}
+                className={configClassName(style.name, {[style.canClick]: routeTo})}
+                onClick={event => routeTo ? routeTo(id) : null}
             >
                 {name}
             </div>

@@ -41,6 +41,11 @@ export default class CategoriesTree extends Component {
     _showTree(timeout) {
 
         if (!timeout) {
+
+            if (this._showTreeTimeout === null) {
+                this._loadFocusedCategoryChildren();
+            }
+
             this._clearToggleTimeouts();
 
             return this.setState({treeOpened: true});
@@ -56,6 +61,16 @@ export default class CategoriesTree extends Component {
             return;
         }
 
+        this._loadFocusedCategoryChildren();
+
+        this._showTreeTimeout = setTimeout(() => {
+            this.setState({treeOpened: true});
+
+            this._showTreeTimeout = null;
+        }, timeout);
+    }
+
+    _loadFocusedCategoryChildren() {
         const {categoriesMap, focusedCategoryId, focusToCategory} = this.props;
 
         const focusedCategory = categoriesMap[focusedCategoryId];
@@ -63,12 +78,6 @@ export default class CategoriesTree extends Component {
         if (focusedCategory && focusedCategory.childrenCount > 0 && !focusedCategory.childrenLoaded) {
             focusToCategory(focusedCategoryId);
         }
-
-        this._showTreeTimeout = setTimeout(() => {
-            this.setState({treeOpened: true});
-
-            this._showTreeTimeout = null;
-        }, timeout);
     }
 
     _hideTree(timeout) {
@@ -125,7 +134,9 @@ export default class CategoriesTree extends Component {
     }
 
     _onMouseEnter(event) {
-        this._showTree(TOGGLE_TREE_TIMEOUT);
+        if (this.props.showCategoryTreeOnHover) {
+            this._showTree(TOGGLE_TREE_TIMEOUT);
+        }
     }
 
     _onMouseLeave(event) {
@@ -252,14 +263,11 @@ export default class CategoriesTree extends Component {
 
     _renderList(activeItems) {
 
-        const {focusToCategory} = this.props;
-
         if (activeItems.length > 0) {
             return (
                 <List
                     items={activeItems}
-                    delimiterType='arrow'
-                    routeTo={focusToCategory}
+                    delimiterType="arrow"
                 />
             )
         }

@@ -28,9 +28,10 @@ json('../variables.json')
     height: 100%
     padding: 0 5px
     white-space: nowrap
-    cursor: pointer
-    &:hover
-        background-color: hover-background-color
+    &.canClick
+        cursor: pointer
+        &:hover
+            background-color: hover-background-color
 
 .delimiter
     float: right

@@ -21,13 +21,19 @@ export default function configurePage(route, req) {
 
     return new Promise(resolve => {
 
-        const {serverRenderingOn, preloadDataOnServer} = getSettings(req);
+        const settings = getSettings(req);
+
+        const {serverRenderingOn, preloadDataOnServer} = settings;
 
         if (!serverRenderingOn && !preloadDataOnServer) {
             return resolve();
         }
 
-        const store = createStore(reducers, {api: createPageApi(req)}, applyMiddleware(batchThunk, crashReporter));
+        const store = createStore(
+            reducers,
+            {api: createPageApi(req), settings},
+            applyMiddleware(batchThunk, crashReporter)
+        );
 
         const {getState, subscribe, dispatch} = store;
 
@@ -88,7 +94,7 @@ function getSettings({cookies: {settings} = {}}) {
     }
 
     try {
-        return JSON.parse(settings);
+        return Object.assign(DEFAULT_SETTINGS, JSON.parse(settings));
     } catch (error) {
         return DEFAULT_SETTINGS;
     }
