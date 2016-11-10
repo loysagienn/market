@@ -3,14 +3,17 @@ import {routeTo, loadMoreModels} from '../actions/actions';
 import ModelList from '../components/ModelList/ModelList';
 
 function mapStateToProps(
-    {models: {loading, modelsFilterMap, modelsMap, offersMap, currentListKey}},
+    {
+        models: {loading, modelsFilterMap, modelsMap, offersMap},
+        router: {currentRoute: {filterKey = ''}}
+    },
     ownProps
 ) {
     return {
         modelsMap,
         offersMap,
-        currentFilter: modelsFilterMap[currentListKey] || [],
-        loading
+        modelsIds: modelsFilterMap[filterKey] || [],
+        modelsLoading: loading
     };
 }
 

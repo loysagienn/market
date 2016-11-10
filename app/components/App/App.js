@@ -1,6 +1,6 @@
 import React from 'react';
 import style from './buildCssMap';
-import {Header, IndexPage, ModelList, PageNotFound, Model, Settings} from '../';
+import {Header, IndexPage, ModelList, PageNotFound, Model, Settings, Filters} from '../';
 import {routeKeys} from '../../common/router/router';
 import {createLogger} from '../../common/logger';
 
@@ -17,11 +17,9 @@ export default function({routeTo, route, models}) {
             <Header
                 routeTo={routeTo}
             />
-            <div className={style.page}>
-                {
-                    renderPage({route, models, routeTo})
-                }
-            </div>
+            {
+                renderPage({route, models, routeTo})
+            }
         </div>
     );
 }
@@ -32,32 +30,47 @@ function renderPage({route, models: {modelsMap}, routeTo}) {
 
         case routeKeys.index:
 
-            return IndexPage();
+            return (
+                <div className={style.page}>
+                    <IndexPage/>
+                </div>
+            );
 
         case routeKeys.models:
 
             return (
-                <ModelList />
+                <div className={style.page}>
+                    <div className={style.modelList}>
+                        <ModelList/>
+                    </div>
+                    <div className={style.filters}>
+                        <Filters/>
+                    </div>
+                </div>
             );
 
         case routeKeys.model:
 
             return (
-                <Model
-                    model={modelsMap[route.modelId]}
-                />
+                <div className={style.page}>
+                    <Model model={modelsMap[route.modelId]}/>
+                </div>
             );
 
         case routeKeys.settings:
 
             return (
-                <Settings/>
+                <div className={style.page}>
+                    <Settings/>
+                </div>
             );
 
         default:
 
             return (
-                <PageNotFound/>
+                <div className={style.page}>
+                    <PageNotFound/>
+                </div>
             );
     }
 }

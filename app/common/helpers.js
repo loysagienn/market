@@ -1,3 +1,4 @@
+import {DEFAULT_SETTINGS} from './constants';
 
 export function stringifyQueryParams(params = {}) {
     const keys = Object.keys(params);
@@ -49,3 +50,13 @@ export function getKeyByObject(params) {
 }
 
 export const immediate = (typeof setImmediate === 'function') ? setImmediate : func => Promise.resolve().then(func);
+
+export function getSettings(cookieSettings) {
+
+    return Object.keys(DEFAULT_SETTINGS)
+        .reduce(
+            (settings, key) =>
+                Object.assign(settings, {[key]: (key in cookieSettings) ? cookieSettings[key] : DEFAULT_SETTINGS[key]}),
+            {}
+        );
+}

@@ -19,4 +19,5 @@ export {default as PageNotFound} from './PageNotFound/PageNotFound';
 export {default as PageSwitcher} from './PageSwitcher/PageSwitcher';
 export {default as Model} from './Model/Model';
 export {default as Checkbox} from './Checkbox/Checkbox';
+export {default as Filters} from '../containers/Filters';
 export * from './Svg/Svg';

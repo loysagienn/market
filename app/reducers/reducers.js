@@ -6,5 +6,6 @@ import categories from './categories/categories';
 import models from './models/models';
 import enableBatching from './enableBatching';
 import settings from './settings';
+import filters from './filters';
 
-export default enableBatching(combineReducers({router, categories, models, api, settings}));
+export default enableBatching(combineReducers({router, categories, models, api, settings, filters}));

@@ -11,14 +11,32 @@ export default class ModelList extends Component {
         super(props);
     }
     _onScroll(event) {
+        this._loadMoreModels();
+    }
+    componentDidMount() {
+        this._loadMoreModels();
+    }
+    componentDidUpdate() {
+        this._loadMoreModels();
+    }
+    _loadMoreModels() {
         const {scrollHeight, clientHeight, scrollTop} = this._listNode;
 
+        console.log('load more models');
+
+        if (this._loadMoreStart) {
+            return;
+        }
+
         if ((scrollHeight - (clientHeight + scrollTop)) < SCROLL_SPACE_BEFORE_LOAD) {
+            this._loadMoreStart = true;
             this.props.loadMoreModels();
         }
     }
     render() {
-        const {loading, currentFilter} = this.props;
+        const {modelsLoading, modelsIds} = this.props;
+
+        this._loadMoreStart = false;
 
         return (
             <div
@@ -26,22 +44,22 @@ export default class ModelList extends Component {
                 ref={node => this._listNode = node}
                 onScroll={event => this._onScroll(event)}
             >
-                {loading && currentFilter.length === 0 ? renderLoading() : this._renderModels()}
+                {modelsLoading && modelsIds.length === 0 ? renderLoading() : this._renderModels()}
             </div>
         )
     }
 
     _renderModels() {
-        const {currentFilter, modelsMap, offersMap, routeTo} = this.props;
+        const {modelsIds, modelsMap, offersMap, routeTo} = this.props;
 
-        if (currentFilter.length === 0) {
+        if (modelsIds.length === 0) {
             return null;
         }
 
         return (
             <div className={style.models}>
                 {
-                    currentFilter.reduce(
+                    modelsIds.reduce(
                         (renderedModels, list) => renderedModels.concat(list.map(({modelId, offerId}) => ModelTile({
                             model: modelId ? modelsMap[modelId] : null,
                             offer: offerId ? offersMap[offerId] : null,
@@ -58,9 +76,9 @@ export default class ModelList extends Component {
     }
 
     _renderMoreLoadingSpinner() {
-        const {loading} = this.props;
+        const {modelsLoading} = this.props;
 
-        if (!loading) {
+        if (!modelsLoading) {
             return null;
         }
 

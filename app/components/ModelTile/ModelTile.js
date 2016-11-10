@@ -2,22 +2,33 @@ import React from 'react';
 import {Tile} from '../';
 import style from './buildCssMap';
 
-export default ({model, offer, routeTo}) => model ? renderModel(model, routeTo) : renderOffer(offer, routeTo);
+export default ({model, offer, routeTo}) => (
+    <div
+        key={model ? model.id : offer.id}
+        className={style.main}
+    >
+        {
+            model ? renderModel(model, routeTo) : renderOffer(offer, routeTo)
+        }
+    </div>
+);
 
 
-function renderOffer({id, name, description, previewPhotos, url, shopInfo}, routeTo) {
+function renderOffer({name, description, previewPhotos, url, shopInfo, price}, routeTo) {
     const previewPhotoUrl = previewPhotos && previewPhotos.length > 0
         ? previewPhotos[0].url
         : '';
 
     return (
         <Tile
-            key={id}
-            className={style.main}
+            className={style.tile}
             href={url}
             target="_blank"
         >
             {renderPreview(previewPhotoUrl)}
+            <div className={style.price}>
+                {price.value} {price.currencyName}
+            </div>
             <div className={style.info}>
                 <div className={style.name}>{name}</div>
                 <div className={style.description}>{description}</div>
@@ -27,7 +38,7 @@ function renderOffer({id, name, description, previewPhotos, url, shopInfo}, rout
     )
 }
 
-function renderModel({id, name, description, previewPhoto = {}, mainPhoto = {}, vendor, link}, routeTo) {
+function renderModel({name, description, previewPhoto = {}, mainPhoto = {}, vendor, link, prices}, routeTo) {
 
     const previewPhotoUrl = previewPhoto.url || mainPhoto.url || '';
 
@@ -35,12 +46,14 @@ function renderModel({id, name, description, previewPhoto = {}, mainPhoto = {}, 
 
     return (
         <Tile
-            key={id}
-            className={style.main}
+            className={style.tile}
             href={link}
             target="_blank"
         >
             {renderPreview(previewPhotoUrl)}
+            <div className={style.price}>
+                ~{prices.avg} {prices.curName}
+            </div>
             <div className={style.info}>
                 <div className={style.name}>
                     {vendor} {name}

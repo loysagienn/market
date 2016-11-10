@@ -1,5 +1,6 @@
 
 import {SETTINGS_COOKIE_NAME, DEFAULT_SETTINGS} from '../common/constants';
+import {getSettings} from '../common/helpers';
 
 
 export function getSettingsFromCookie() {
@@ -10,10 +11,9 @@ export function getSettingsFromCookie() {
     }
 
     try {
-        const settings = JSON.parse(settingsStr);
-        return Object.assign(DEFAULT_SETTINGS, settings);
+        return getSettings(JSON.parse(settingsStr));
     } catch (error) {
-        return;
+        return DEFAULT_SETTINGS;
     }
 }
 

@@ -24,9 +24,7 @@ export default function renderHtml({html = '', initialState = {}} = {}) {
     
 <div class="app" id="app">${html}</div>
     
-<script>
-    window.__INITIAL_STATE__ = ${initialStateString};
-</script>
+<script>window.__INITIAL_STATE__ = ${initialStateString};</script>
 <script src = "${config.reduxUrl}"></script>
 <script src = "${config.reactUrl}"></script>
 <script src = "${config.reactDomUrl}"></script>

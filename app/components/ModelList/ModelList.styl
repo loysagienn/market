@@ -19,12 +19,17 @@ json('../variables.json')
         .loadingSvg
             fill: c-white
     .moreLoading
+        box-sixing: border-box;
         text-align: center;
-        padding: 20px 0 30px;;
+        padding: 20px 0;
+        width: 100%;
         .loadingSvg
             height: 50px;
             width: 50px;
             fill: c-white
 
 .models
-    padding: 1px 5px
+    padding: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;

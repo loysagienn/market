@@ -13,6 +13,7 @@ import {renderToString} from 'react-dom/server';
 import api from '../api/api';
 import {createLogger} from '../logger';
 import {DEFAULT_SETTINGS} from '../../common/constants';
+import {getSettings} from '../../common/helpers';
 
 const log = createLogger(module, {console: true});
 
@@ -21,7 +22,7 @@ export default function configurePage(route, req) {
 
     return new Promise(resolve => {
 
-        const settings = getSettings(req);
+        const settings = getSettingsFromCookie(req);
 
         const {serverRenderingOn, preloadDataOnServer} = settings;
 
@@ -88,13 +89,13 @@ function createPageApi(req) {
     return pageApi;
 }
 
-function getSettings({cookies: {settings} = {}}) {
+function getSettingsFromCookie({cookies: {settings} = {}}) {
     if (!settings) {
         return DEFAULT_SETTINGS;
     }
 
     try {
-        return Object.assign(DEFAULT_SETTINGS, JSON.parse(settings));
+        return getSettings(JSON.parse(settings));
     } catch (error) {
         return DEFAULT_SETTINGS;
     }

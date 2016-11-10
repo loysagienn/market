@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import {MODELS_LOAD_START, MODELS_LOAD_DONE, MODELS_LOAD_FAIL, MODELS_LIST_SWITCH} from '../../actions/action-types';
+import {MODELS_LOAD_START, MODELS_LOAD_DONE, MODELS_LOAD_FAIL} from '../../actions/action-types';
 import {createLogger} from '../../common/logger';
 
 const log = createLogger(module);
@@ -7,16 +7,20 @@ const log = createLogger(module);
 
 
 export default combineReducers({
-    currentListKey,
     modelsFilterMap,
+    pagesCount,
     modelsMap,
     offersMap,
     loading
 })
 
-function currentListKey(state = '', action) {
-    if (action.type === MODELS_LIST_SWITCH) {
-        return action.filterKey;
+function pagesCount(state = {}, action) {
+
+    if (action.type === MODELS_LOAD_DONE) {
+
+        const {filterKey, page, morePagesCount} = action;
+
+        state = Object.assign({}, {[filterKey]: page + morePagesCount});
     }
 
     return state;

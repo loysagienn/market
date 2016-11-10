@@ -1,7 +1,7 @@
 import {
     ROUTE_LOAD_START, ROUTE_LOAD_DONE, ROUTE_LOAD_FAIL,
     CATEGORIES_LOAD_START, CATEGORIES_LOAD_DONE, CATEGORIES_LOAD_FAIL,
-    MODELS_LOAD_START, MODELS_LOAD_DONE, MODELS_LOAD_FAIL, MODELS_LIST_SWITCH,
+    MODELS_LOAD_START, MODELS_LOAD_DONE, MODELS_LOAD_FAIL,
     LOAD_FILTERS_START, LOAD_FILTERS_DONE, LOAD_FILTERS_FAIL
 } from '../action-types';
 import {categoryChildrenLoaded, loadCategories} from '../../common/categoriesLoader';
@@ -35,12 +35,16 @@ function checkFilters(dispatch, getState, route, dataPromises) {
     const {api} = getState();
     const {filter: {categoryId} = {}} = route;
 
-    const filtersPromise = api.getCategoryFilters({categoryId});
+    dispatch({type: LOAD_FILTERS_START, categoryId});
 
-    dispatch({type: LOAD_FILTERS_START});
+    const filtersPromise = api.getCategoryFilters({
+        categoryId,
+        vendor_max_values: 10
+    });
+
     filtersPromise
-        .then(filters => log.info(filters))
-        .catch(error => log.error(error));
+        .then(({filters}) => dispatch({type: LOAD_FILTERS_DONE, filters, categoryId}))
+        .catch(error => dispatch({type: LOAD_FILTERS_FAIL, error, categoryId}));
 
     dataPromises.push(filtersPromise);
 }
@@ -51,11 +55,9 @@ function checkModels(dispatch, getState, route, dataPromises) {
     const {filter, filterKey} = route;
     const {categoryId} = filter;
 
-    if (filterKey in modelsFilterMap) {
-        dispatch({type: MODELS_LIST_SWITCH, filterKey});
-    } else {
+    if (!(filterKey in modelsFilterMap)) {
+
         dispatch({type: MODELS_LOAD_START, filterKey});
-        dispatch({type: MODELS_LIST_SWITCH, filterKey});
 
         const page = 1;
 
