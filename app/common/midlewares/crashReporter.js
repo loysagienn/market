@@ -1,4 +1,5 @@
 import {createLogger} from '../logger';
+import {BATCH_ACTIONS} from '../../actions/action-types';
 
 const log = createLogger(module, {console: true});
 

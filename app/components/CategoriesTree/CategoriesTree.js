@@ -7,67 +7,22 @@ import {getSelectedTree, getSelectedTreeChildren} from '../../common/tree';
 
 const log = createLogger(module);
 
-const TOGGLE_TREE_TIMEOUT = 300;
-
 export default class CategoriesTree extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            treeOpened: false
-        };
-
-        this._onMouseEnterHandler = event => this._onMouseEnter(event);
-        this._onMouseLeaveHandler = event => this._onMouseLeave(event);
-        this._onClickHandler = event => this._onClick(event);
-
-        this._showTreeTimeout = null;
-        this._hideTreeTimeout = null;
+        this._treeOpened = false;
     }
 
-    _clearToggleTimeouts() {
-        if (this._showTreeTimeout !== null) {
-            clearTimeout(this._showTreeTimeout);
-
-            this._showTreeTimeout = null;
-        }
-        if (this._hideTreeTimeout !== null) {
-            clearTimeout(this._hideTreeTimeout);
-
-            this._hideTreeTimeout = null;
-        }
-    }
-
-    _showTree(timeout) {
-
-        if (!timeout) {
-
-            if (this._showTreeTimeout === null) {
-                this._loadFocusedCategoryChildren();
-            }
-
-            this._clearToggleTimeouts();
-
-            return this.setState({treeOpened: true});
-        }
-
-        if (this._hideTreeTimeout !== null) {
-            clearTimeout(this._hideTreeTimeout);
-
-            this._hideTreeTimeout = null;
-        }
-
-        if (this.state.treeOpened || this._showTreeTimeout !== null) {
+    _showTree() {
+        if (this._treeOpened) {
             return;
         }
 
         this._loadFocusedCategoryChildren();
 
-        this._showTreeTimeout = setTimeout(() => {
-            this.setState({treeOpened: true});
-
-            this._showTreeTimeout = null;
-        }, timeout);
+        this._treeOpened = true;
+        this.forceUpdate();
     }
 
     _loadFocusedCategoryChildren() {
@@ -80,43 +35,28 @@ export default class CategoriesTree extends Component {
         }
     }
 
-    _hideTree(timeout) {
-
-        if (!timeout) {
-            this._clearToggleTimeouts();
-
-            return this.setState({treeOpened: false});
-        }
-
-        if (this._showTreeTimeout !== null) {
-            clearTimeout(this._showTreeTimeout);
-
-            this._showTreeTimeout = null;
-        }
-
-        if (!this.state.treeOpened || this._hideTreeTimeout !== null) {
+    _hideTree() {
+        if (!this._treeOpened) {
             return;
         }
 
-        this._hideTreeTimeout = setTimeout(() => {
-            this.setState({treeOpened: false});
-
-            this._hideTreeTimeout = null;
-        }, timeout);
+        this._treeOpened = false;
+        this.forceUpdate();
     }
 
     _routeToFocused() {
-        const {focusedCategoryId, filterCategoryId, routeTo} = this.props;
+        const {focusedCategoryId, filterCategoryId} = this.props;
 
         if (focusedCategoryId !== null && focusedCategoryId !== filterCategoryId) {
             this._routeToCategory(focusedCategoryId);
         } else {
-            this._hideTree();
+            this._mainNode.blur();
         }
     }
 
     _routeToCategory(categoryId) {
-        this._hideTree();
+        this._treeOpened = false;
+        this._mainNode.blur();
 
         const {routeTo} = this.props;
 
@@ -124,7 +64,7 @@ export default class CategoriesTree extends Component {
     }
 
     _clearFocused() {
-        this._hideTree();
+        this._mainNode.blur();
 
         const {focusToCategory, focusedCategoryId} = this.props;
 
@@ -133,26 +73,10 @@ export default class CategoriesTree extends Component {
         }
     }
 
-    _onMouseEnter(event) {
-        if (this.props.showCategoryTreeOnHover) {
-            this._showTree(TOGGLE_TREE_TIMEOUT);
-        }
-    }
-
-    _onMouseLeave(event) {
-        this._hideTree(TOGGLE_TREE_TIMEOUT);
-    }
-
-    _onClick(event) {
-        if (!this.state.treeOpened) {
-            this._showTree();
-        }
-    }
-
     render() {
 
         const {filterCategoryId, categoriesMap, focusedCategoryId} = this.props;
-        const {treeOpened} = this.state;
+        const treeOpened = this._treeOpened;
 
         const activeCategoryId = focusedCategoryId || filterCategoryId;
 
@@ -166,10 +90,10 @@ export default class CategoriesTree extends Component {
         return (
             <div
                 className={configClassName(style.main, {[style.treeOpened]: treeOpened})}
-                onMouseEnter={this._onMouseEnterHandler}
-                onMouseLeave={this._onMouseLeaveHandler}
-                onClick={this._onClickHandler}
-                ref="mainNode"
+                tabIndex="0"
+                onFocus={() => this._showTree()}
+                onBlur={() => this._hideTree()}
+                ref={ref => this._mainNode = ref}
             >
 
                 {this._renderBackBtn(activeCategoryId)}
@@ -187,7 +111,7 @@ export default class CategoriesTree extends Component {
 
     _renderButtons() {
 
-        const {focusedCategoryId, filterCategoryId, categoriesMap} = this.props;
+        const {focusedCategoryId, filterCategoryId} = this.props;
 
         const disabled = focusedCategoryId === null || focusedCategoryId === filterCategoryId;
 
@@ -213,7 +137,7 @@ export default class CategoriesTree extends Component {
 
     _renderTree(columns) {
 
-        if (!this.state.treeOpened) {
+        if (!this._treeOpened) {
             return null;
         }
 

@@ -25,6 +25,3 @@ export default function ({categoriesMap, loading, focusedCategoryId, filterCateg
 
     return {categoriesMap, rootCategoryId, loading, focusedCategoryId, filterCategoryId};
 }
-
-
-

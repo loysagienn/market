@@ -28,9 +28,6 @@ export function loadMoreModels() {
 
         api.getModels({categoryId, count: 10, page})
             .then(({list, morePagesCount}) => dispatch({type: MODELS_LOAD_DONE, list, morePagesCount, filterKey, page}))
-            .catch(error => {
-                log.error(error);
-                dispatch({type: MODELS_LOAD_FAIL, error, filterKey, page});
-            });
+            .catch(error => dispatch({type: MODELS_LOAD_FAIL, error, filterKey, page}));
     }
 }

@@ -10,6 +10,7 @@
   "c-white": "#ffffff",
   "c-black": "#000000",
   "c-gray-c0": "#c0c0c0",
+  "c-gray-f8": "#f8f8f8",
   "c-gray-40": "#404040",
   "c-hover": "#f8f8f8",
   "hover-background-color": "rgba(0,0,0,0.05)",
@@ -19,7 +20,7 @@
   "fs-smaller": "13px",
   "fs-little": "12px",
 
-  "list-z-index": "10",
+  "categories-list-z-index": "10",
   "header-z-index": "3",
   "tree-z-index": "5",
   "popup-z-index": "1000",
