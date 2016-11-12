@@ -1,4 +1,8 @@
-import {LOAD_FILTERS_START, LOAD_FILTERS_DONE, LOAD_FILTERS_FAIL, UPDATE_FILTER} from '../actions/action-types';
+import {
+    LOAD_FILTERS_START, LOAD_FILTERS_DONE, LOAD_FILTERS_FAIL, UPDATE_FILTER,
+    ROUTE_TO
+} from '../actions/action-types';
+import {routeKeys} from '../common/router/router';
 
 export default function filters(state = {}, action) {
 
@@ -26,9 +30,27 @@ export default function filters(state = {}, action) {
             const {filter} = action;
 
             return Object.assign({}, state, {[categoryId]: updateFilter(state[categoryId], filter)});
+
+        case ROUTE_TO:
+
+            const {route} = action;
+
+            if (route.key === routeKeys.models) {
+                const {categoryId, filterValues} = route;
+                return Object.assign({}, state, {[categoryId]: updateFilters(state[categoryId], filterValues)});
+            }
+
     }
 
     return state;
+}
+
+function updateFilters(categoryFilters = {}, values) {
+    categoryFilters = Object.assign({values: {}}, categoryFilters);
+
+    categoryFilters.values = Object.assign({}, categoryFilters.values, values);
+
+    return categoryFilters;
 }
 
 function updateFilter(categoryFilters = {}, {key, value}) {
