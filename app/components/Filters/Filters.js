@@ -34,7 +34,7 @@ export default class Filters extends Component {
 
     _renderFilter(filter) {
 
-        let {id, name, type} = filter;
+        let {id, key, name} = filter;
 
         const {routeToActualFilter, updateFilter, values} = this.props;
 
@@ -50,7 +50,7 @@ export default class Filters extends Component {
                         {name}
                     </div>
                     <div className={style.filterControl}>
-                        {renderFilterControl(filter, values[id], updateFilter, routeToActualFilter)}
+                        {renderFilterControl(filter, values[key], updateFilter, routeToActualFilter)}
                     </div>
                 </div>
             </div>
@@ -59,9 +59,9 @@ export default class Filters extends Component {
 }
 
 function renderFilterControl(filter, value, updateFilter, onBlur) {
-    const {type, id} = filter;
+    const {type, key} = filter;
 
-    const onChange = value => updateFilter({id, value});
+    const onChange = value => updateFilter({key, value});
 
     switch (type) {
         case filterTypes.NUMERIC:

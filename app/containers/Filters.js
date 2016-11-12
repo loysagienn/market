@@ -20,7 +20,7 @@ function mapStateToProps(
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
     routeToActualFilter: params => dispatch(routeToActualFilter()),
-    updateFilter: params => dispatch(updateFilter(params))
+    updateFilter: filter => dispatch(updateFilter(filter))
 });
 
 export default connect(

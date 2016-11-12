@@ -31,11 +31,11 @@ export default function filters(state = {}, action) {
     return state;
 }
 
-function updateFilter(categoryFilters = {}, {id, value}) {
+function updateFilter(categoryFilters = {}, {key, value}) {
 
     categoryFilters = Object.assign({values: {}}, categoryFilters);
 
-    categoryFilters.values = Object.assign({}, categoryFilters.values, {[id]: value});
+    categoryFilters.values = Object.assign({}, categoryFilters.values, {[key]: value});
 
     return categoryFilters;
 }
@@ -45,7 +45,13 @@ function loadFiltersStart(categoryFilters = {}) {
 }
 
 function loadFiltersDone(categoryFilters = {}, filters) {
-    return Object.assign({}, categoryFilters, {loading: false, filters});
+    filters.forEach(filter => filter.key = filter.shortname || filter.id);
+
+    const filtersIds = filters.reduce((filtersIds, {id, key}) => Object.assign(filtersIds, {[key]: id}), {});
+
+    console.log(Object.keys(filtersIds).join('\n'));
+
+    return Object.assign({}, categoryFilters, {loading: false, filters, filtersIds});
 }
 
 function loadFiltersFail(categoryFilters = {}, error) {

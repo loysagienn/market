@@ -35,7 +35,7 @@ export function routeTo({path = '', route}) {
 
 export function routeToActualFilter() {
     return function(dispatch, getState) {
-        const {categories: {focusedCategoryId: categoryId}, filters} = getState();
+        const {categories: {filterCategoryId: categoryId}, filters} = getState();
 
         const {values = {}} = filters[categoryId] || {};
 

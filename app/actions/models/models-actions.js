@@ -4,6 +4,7 @@ import {
 } from '../action-types';
 import {routeKeys} from '../../common/router/router';
 import {createLogger} from '../../common/logger';
+import loadModels from './loadModels';
 
 const log = createLogger(module, {console: true});
 
@@ -13,13 +14,13 @@ export function loadMoreModels() {
 
     return function (dispatch, getState) {
 
-        const {models: {modelsFilterMap, pagesCount, loading}, api, router: {currentRoute}} = getState();
+        const {models: {modelsFilterMap, pagesCount, loading}, router: {currentRoute}} = getState();
 
         if (loading || currentRoute.key !== routeKeys.models) {
             return null;
         }
 
-        const {filterKey, categoryId, filterValues} = currentRoute;
+        const {filterKey} = currentRoute;
 
         const loadedPagesCount = modelsFilterMap[filterKey] ? modelsFilterMap[filterKey].length : 0;
 
@@ -31,10 +32,6 @@ export function loadMoreModels() {
             return null;
         }
 
-        dispatch({type: MODELS_LOAD_START, filterKey, page});
-
-        api.getModels(Object.assign({categoryId, count: 10, page}, filterValues))
-            .then(({list, morePagesCount}) => dispatch({type: MODELS_LOAD_DONE, list, morePagesCount, filterKey, page}))
-            .catch(error => dispatch({type: MODELS_LOAD_FAIL, error, filterKey, page}));
+        loadModels(dispatch, getState, currentRoute, page);
     }
 }

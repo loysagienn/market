@@ -6,6 +6,7 @@ import {
 } from '../action-types';
 import {categoryChildrenLoaded, loadCategories} from '../../common/categoriesLoader';
 import {createLogger} from '../../common/logger';
+import loadModels from '../models/loadModels';
 
 const log = createLogger(module, {console: true});
 
@@ -13,11 +14,11 @@ export default function routeToFilter(dispatch, getState, route) {
 
     const dataPromises = [];
 
+    checkFilters(dispatch, getState, route, dataPromises);
+
     checkModels(dispatch, getState, route, dataPromises);
 
     checkCategories(dispatch, getState, route, dataPromises);
-
-    checkFilters(dispatch, getState, route, dataPromises);
 
     if (dataPromises.length === 0) {
         return;
@@ -35,42 +36,35 @@ function checkFilters(dispatch, getState, route, dataPromises) {
     const {api, filters} = getState();
     const {categoryId} = route;
 
-    if (!categoryId || (categoryId in filters)) {
-        return;
+    if (categoryId in filters) {
+        return null;
     }
 
     dispatch({type: LOAD_FILTERS_START, categoryId});
 
     const filtersPromise = api.getCategoryFilters({
         categoryId,
+        filter_set: 'popular',
         vendor_max_values: 10
     });
+
+    dataPromises.push(filtersPromise);
 
     filtersPromise
         .then(({filters}) => dispatch({type: LOAD_FILTERS_DONE, filters, categoryId}))
         .catch(error => dispatch({type: LOAD_FILTERS_FAIL, error, categoryId}));
-
-    dataPromises.push(filtersPromise);
 }
 
 function checkModels(dispatch, getState, route, dataPromises) {
 
-    const {models: {modelsFilterMap}, api} = getState();
-    const {categoryId, filterValues, filterKey} = route;
+    const {models: {modelsFilterMap}} = getState();
+    const {filterKey} = route;
 
     if (filterKey in modelsFilterMap) {
         return;
     }
 
-    dispatch({type: MODELS_LOAD_START, filterKey});
-
-    const page = 1;
-
-    const modelsPromise = api.getModels(Object.assign({categoryId, count: 10, page}, filterValues));
-
-    modelsPromise
-        .then(({list, morePagesCount}) => dispatch({type: MODELS_LOAD_DONE, list, morePagesCount, filterKey, page}))
-        .catch(error => dispatch({type: MODELS_LOAD_FAIL, error, filterKey, page}));
+    const modelsPromise = loadModels(dispatch, getState, route);
 
     dataPromises.push(modelsPromise);
 }

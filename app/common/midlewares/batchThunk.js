@@ -8,20 +8,23 @@ const batchThunk = ({dispatch, getState}) => next => action => {
     }
 
     let actions = [];
-    let collectActions = false;
+    let collectActionsPromise = null;
 
     const fakeDispatch = (...newActions) => {
-        if (!collectActions) {
-            collectActions = true;
-            immediate(() => {
-                if (actions.length > 0) {
-                    actions.length === 1 ? dispatch(actions[0]) : dispatch({type: BATCH_ACTIONS, actions});
-                    actions = [];
-                }
-                collectActions = false;
+        newActions.forEach(action => typeof action === 'function' ? dispatch(action) : actions.push(action));
+        if (collectActionsPromise === null) {
+            collectActionsPromise = new Promise(resolve => {
+                immediate(() => {
+                    if (actions.length > 0) {
+                        actions.length === 1 ? dispatch(actions[0]) : dispatch({type: BATCH_ACTIONS, actions});
+                        actions = [];
+                    }
+                    collectActionsPromise = null;
+                    resolve();
+                });
             });
         }
-        newActions.forEach(action => typeof action === 'function' ? dispatch(action) : actions.push(action));
+        return collectActionsPromise;
     };
 
     action(fakeDispatch, getState);
