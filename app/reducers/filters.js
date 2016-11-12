@@ -49,8 +49,6 @@ function loadFiltersDone(categoryFilters = {}, filters) {
 
     const filtersIds = filters.reduce((filtersIds, {id, key}) => Object.assign(filtersIds, {[key]: id}), {});
 
-    console.log(Object.keys(filtersIds).join('\n'));
-
     return Object.assign({}, categoryFilters, {loading: false, filters, filtersIds});
 }
 
