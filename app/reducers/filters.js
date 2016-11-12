@@ -1,4 +1,4 @@
-import {LOAD_FILTERS_START, LOAD_FILTERS_DONE, LOAD_FILTERS_FAIL} from '../actions/action-types';
+import {LOAD_FILTERS_START, LOAD_FILTERS_DONE, LOAD_FILTERS_FAIL, UPDATE_FILTER} from '../actions/action-types';
 
 export default function filters(state = {}, action) {
 
@@ -20,9 +20,24 @@ export default function filters(state = {}, action) {
             const {error} = action;
 
             return Object.assign({}, state, {[categoryId]: loadFiltersFail(state[categoryId], error)});
+
+        case UPDATE_FILTER:
+
+            const {filter} = action;
+
+            return Object.assign({}, state, {[categoryId]: updateFilter(state[categoryId], filter)});
     }
 
     return state;
+}
+
+function updateFilter(categoryFilters = {}, {id, value}) {
+
+    categoryFilters = Object.assign({values: {}}, categoryFilters);
+
+    categoryFilters.values = Object.assign({}, categoryFilters.values, {[id]: value});
+
+    return categoryFilters;
 }
 
 function loadFiltersStart(categoryFilters = {}) {

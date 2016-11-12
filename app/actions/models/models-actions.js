@@ -19,7 +19,7 @@ export function loadMoreModels() {
             return null;
         }
 
-        const {filterKey, filter: {categoryId}} = currentRoute;
+        const {filterKey, categoryId, filterValues} = currentRoute;
 
         const loadedPagesCount = modelsFilterMap[filterKey] ? modelsFilterMap[filterKey].length : 0;
 
@@ -33,7 +33,7 @@ export function loadMoreModels() {
 
         dispatch({type: MODELS_LOAD_START, filterKey, page});
 
-        api.getModels({categoryId, count: 10, page})
+        api.getModels(Object.assign({categoryId, count: 10, page}, filterValues))
             .then(({list, morePagesCount}) => dispatch({type: MODELS_LOAD_DONE, list, morePagesCount, filterKey, page}))
             .catch(error => dispatch({type: MODELS_LOAD_FAIL, error, filterKey, page}));
     }

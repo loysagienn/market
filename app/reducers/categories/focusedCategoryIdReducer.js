@@ -13,8 +13,7 @@ export default function focusedCategoryIdReducer(state = null, action, categorie
 
     if (
         type === ROUTE_TO ||
-        type === FOCUS_TO_CATEGORY ||
-        (type === ROUTE_LOAD_DONE && action.route.key === routeKeys.filter)
+        type === FOCUS_TO_CATEGORY
     ) {
 
         if (filterCategoryId === rootCategoryId) {

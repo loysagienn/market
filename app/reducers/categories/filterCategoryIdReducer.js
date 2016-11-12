@@ -9,7 +9,7 @@ export default function filterCategoryIdReducer(state, action, rootCategoryId) {
         const {route} = action;
 
         if (route.key === routeKeys.models) {
-            return route.filter.categoryId || rootCategoryId;
+            return route.categoryId || rootCategoryId;
         }
 
         if (route.key === routeKeys.index && route.childRoute === null) {

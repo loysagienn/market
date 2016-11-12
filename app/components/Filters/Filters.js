@@ -1,7 +1,12 @@
 import React, {Component} from 'react';
 import style from './buildCssMap';
-import {Loading, Tile} from '../';
+import {Loading, Input, Tile} from '../';
 
+const filterTypes = {
+    NUMERIC: 'NUMERIC',
+    ENUMERATOR: 'ENUMERATOR',
+    BOOL: 'BOOL'
+};
 
 export default class Filters extends Component {
     constructor(props) {
@@ -9,11 +14,13 @@ export default class Filters extends Component {
     }
     render() {
 
-        const {filters, loading, routeTo} = this.props;
+        const {loading} = this.props;
 
         return (
             <div className={style.main}>
-                {loading ? renderLoading() : this._renderFilters()}
+                <Tile className={style.filters}>
+                    {loading ? renderLoading() : this._renderFilters()}
+                </Tile>
             </div>
         )
     }
@@ -29,7 +36,7 @@ export default class Filters extends Component {
 
         let {id, name, type} = filter;
 
-        const {routeTo} = this.props;
+        const {routeToActualFilter, updateFilter, values} = this.props;
 
         name = name.charAt(0).toUpperCase() + name.slice(1);
 
@@ -39,17 +46,36 @@ export default class Filters extends Component {
                 className={style.filterWrapper}
             >
                 <div className={style.filter}>
-                    {name}
-                    <br/>
-                    {type}
+                    <div className={style.filterName}>
+                        {name}
+                    </div>
+                    <div className={style.filterControl}>
+                        {renderFilterControl(filter, values[id], updateFilter, routeToActualFilter)}
+                    </div>
                 </div>
             </div>
         )
     }
 }
 
-function numeric({maxValue = null, minValue = null, onChange}) {
+function renderFilterControl(filter, value, updateFilter, onBlur) {
+    const {type, id} = filter;
 
+    const onChange = value => updateFilter({id, value});
+
+    switch (type) {
+        case filterTypes.NUMERIC:
+
+            return renderNumeric(filter, value, onChange, onBlur);
+    }
+
+    return type;
+}
+
+function renderNumeric({maxValue = null, minValue = null}, value, onChange, onBlur) {
+    return (
+        <Input value={value || ''} onChange={onChange} className={style.input} onBlur={onBlur}/>
+    );
 }
 
 function renderLoading() {

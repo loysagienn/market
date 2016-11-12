@@ -5,15 +5,18 @@ const DEFAULT_COUNT = 10;
 
 export default function getModels({params, request}) {
 
-    const {categoryId, page = 1, count = DEFAULT_COUNT, ip} = params;
+    const {categoryId, page = 1, count = DEFAULT_COUNT, ip: remote_ip} = params;
 
     const filterPath = `filter/${categoryId}`;
 
-    const queryParams = {
-        remote_ip: ip,
-        count,
-        page
-    };
+    const filterQueryParams = Object.keys(params).reduce(
+        (filterQueryParams, key) => ['categoryId', 'page', 'count'].indexOf(key) !== -1
+            ? filterQueryParams
+            : Object.assign(filterQueryParams, {[key]: params[key]}),
+        {}
+    );
+
+    const queryParams = Object.assign({remote_ip, count, page}, filterQueryParams);
 
     const path = `/${API_VERSION}/${filterPath}.json${stringifyQueryParams(queryParams)}`;
 

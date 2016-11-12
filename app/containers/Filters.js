@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import {routeTo} from '../actions/actions';
+import {routeToActualFilter, updateFilter} from '../actions/actions';
 import Filters from '../components/Filters/Filters';
 
 function mapStateToProps(
@@ -13,12 +13,14 @@ function mapStateToProps(
 
     return {
         loading: categoryFilter.loading || false,
-        filters: categoryFilter.filters || []
+        filters: categoryFilter.filters || [],
+        values: categoryFilter.values || {}
     };
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-    routeTo: params => dispatch(routeTo(params))
+    routeToActualFilter: params => dispatch(routeToActualFilter()),
+    updateFilter: params => dispatch(updateFilter(params))
 });
 
 export default connect(

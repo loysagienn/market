@@ -32,8 +32,12 @@ export default function routeToFilter(dispatch, getState, route) {
 
 function checkFilters(dispatch, getState, route, dataPromises) {
 
-    const {api} = getState();
-    const {filter: {categoryId} = {}} = route;
+    const {api, filters} = getState();
+    const {categoryId} = route;
+
+    if (!categoryId || (categoryId in filters)) {
+        return;
+    }
 
     dispatch({type: LOAD_FILTERS_START, categoryId});
 
@@ -52,29 +56,29 @@ function checkFilters(dispatch, getState, route, dataPromises) {
 function checkModels(dispatch, getState, route, dataPromises) {
 
     const {models: {modelsFilterMap}, api} = getState();
-    const {filter, filterKey} = route;
-    const {categoryId} = filter;
+    const {categoryId, filterValues, filterKey} = route;
 
-    if (!(filterKey in modelsFilterMap)) {
-
-        dispatch({type: MODELS_LOAD_START, filterKey});
-
-        const page = 1;
-
-        const modelsPromise = api.getModels({categoryId, count: 10, page});
-
-        modelsPromise
-            .then(({list, morePagesCount}) => dispatch({type: MODELS_LOAD_DONE, list, morePagesCount, filterKey, page}))
-            .catch(error => dispatch({type: MODELS_LOAD_FAIL, error, filterKey, page}));
-
-        dataPromises.push(modelsPromise);
+    if (filterKey in modelsFilterMap) {
+        return;
     }
+
+    dispatch({type: MODELS_LOAD_START, filterKey});
+
+    const page = 1;
+
+    const modelsPromise = api.getModels(Object.assign({categoryId, count: 10, page}, filterValues));
+
+    modelsPromise
+        .then(({list, morePagesCount}) => dispatch({type: MODELS_LOAD_DONE, list, morePagesCount, filterKey, page}))
+        .catch(error => dispatch({type: MODELS_LOAD_FAIL, error, filterKey, page}));
+
+    dataPromises.push(modelsPromise);
 }
 
 function checkCategories(dispatch, getState, route, dataPromises) {
 
     const {categories: {categoriesMap, rootCategoryId}, api} = getState();
-    const {filter: {categoryId} = {}} = route;
+    const {categoryId} = route;
 
     if (!categoryChildrenLoaded(categoriesMap, categoryId)) {
         dispatch({type: CATEGORIES_LOAD_START});

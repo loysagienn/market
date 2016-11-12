@@ -39,24 +39,26 @@ export default {
                 return null;
             }
 
-            const filter = parseQueryParams(query);
+            const filter = parseQueryParams(query) || {};
 
-            if (filter.categoryId) {
-                const categoryId = +filter.categoryId;
+            const categoryId = +filter.categoryId;
 
-                if (isNaN(categoryId)) {
-                    return null;
-                }
-
-                filter.categoryId = categoryId;
+            if (isNaN(categoryId)) {
+                return null;
             }
+
+            const filterValues = Object.keys(filter).reduce(
+                (filterValues, key) =>
+                    key === 'categoryId' ? filterValues : Object.assign(filterValues, {[key]: filter[key]}),
+                {}
+            );
 
             const filterKey = getKeyByObject(filter);
 
-            return {filter, filterKey};
+            return {categoryId, filterValues, filterKey};
         },
-        getPath({filter}) {
-            return `models${stringifyQueryParams(filter)}`;
+        getPath({categoryId, filterValues}) {
+            return `models${stringifyQueryParams(Object.assign({}, filterValues, {categoryId}))}`;
         },
         childRouteNodeKeys: []
     },

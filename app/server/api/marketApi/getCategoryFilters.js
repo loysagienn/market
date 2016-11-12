@@ -17,6 +17,7 @@ export default function getCategoryFilters({params, request}) {
 
     const path = `/${API_VERSION}/${categoryPath}.json${stringifyQueryParams(queryParams)}`;
 
+    console.log(path);
     const options = getOptions(path);
 
     return request(options);

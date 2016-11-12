@@ -22,8 +22,6 @@ export default class ModelList extends Component {
     _loadMoreModels() {
         const {scrollHeight, clientHeight, scrollTop} = this._listNode;
 
-        console.log('load more models');
-
         if (this._loadMoreStart) {
             return;
         }

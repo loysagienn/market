@@ -20,4 +20,5 @@ export {default as PageSwitcher} from './PageSwitcher/PageSwitcher';
 export {default as Model} from './Model/Model';
 export {default as Checkbox} from './Checkbox/Checkbox';
 export {default as Filters} from '../containers/Filters';
+export {default as Input} from './Input/Input';
 export * from './Svg/Svg';

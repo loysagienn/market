@@ -1,0 +1,16 @@
+@import '../mixins.styl'
+json('../variables.json')
+
+.main
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    outline: 0;
+    border: 0;
+    border-bottom: 1px solid c-gray-c0;
+    padding: 5px 5px 6px 5px;
+    font-size: 14px;
+    background-color: c-white
+    &:focus
+        padding-bottom: 5px;
+        border-bottom: 2px solid c-main
