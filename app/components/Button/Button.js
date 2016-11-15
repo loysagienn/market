@@ -4,7 +4,8 @@ import {configClassName} from '../../common/helpers';
 
 const themes = {
     default: style.themeDefault,
-    transparent: style.themeTransparent
+    transparent: style.themeTransparent,
+    white: style.themeWhite
 };
 
 export default ({children, onClick, className, disabled, theme}) => (

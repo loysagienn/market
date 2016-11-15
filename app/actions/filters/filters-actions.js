@@ -4,8 +4,12 @@ import {routeKeys} from '../../common/router/router';
 export function updateFilter(filter) {
     return function(dispatch, getState) {
 
-        const {categories: {filterCategoryId: categoryId}} = getState();
+        const {categories: {filterCategoryId: categoryId}, filters} = getState();
 
-        dispatch({type: UPDATE_FILTER, categoryId, filter});
+        const {values} = filters[categoryId] || {};
+
+        const filterValues = Object.assign({}, values, filter);
+
+        dispatch({type: UPDATE_FILTER, categoryId, filterValues});
     }
 }

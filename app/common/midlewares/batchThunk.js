@@ -7,27 +7,21 @@ const batchThunk = ({dispatch, getState}) => next => action => {
         return next(action);
     }
 
-    let actions = [];
-    let collectActionsPromise = null;
+    const actions = [];
+    let collectActions = true;
 
-    const fakeDispatch = (...newActions) => {
-        newActions.forEach(action => typeof action === 'function' ? dispatch(action) : actions.push(action));
-        if (collectActionsPromise === null) {
-            collectActionsPromise = new Promise(resolve => {
-                immediate(() => {
-                    if (actions.length > 0) {
-                        actions.length === 1 ? dispatch(actions[0]) : dispatch({type: BATCH_ACTIONS, actions});
-                        actions = [];
-                    }
-                    collectActionsPromise = null;
-                    resolve();
-                });
-            });
-        }
-        return collectActionsPromise;
-    };
+    action(
+        (...newActions) => collectActions
+            ? newActions.forEach(action => typeof action === 'function' ? dispatch(action) : actions.push(action))
+            : newActions.forEach(dispatch),
+        getState
+    );
 
-    action(fakeDispatch, getState);
+    if (actions.length > 0) {
+        actions.length === 1 ? dispatch(actions[0]) : dispatch({type: BATCH_ACTIONS, actions});
+    }
+
+    collectActions = false;
 };
 
 export default batchThunk;

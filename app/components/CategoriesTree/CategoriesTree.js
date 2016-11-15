@@ -120,7 +120,7 @@ export default class CategoriesTree extends Component {
                 <Button
                     className={style.button}
                     onClick={() => this._clearFocused()}
-                    theme='transparent'
+                    theme='white'
                 >
                     Отменить
                 </Button>

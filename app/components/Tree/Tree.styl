@@ -18,7 +18,7 @@ json('../variables.json')
     height: 100%
 
 .column
-    border-right: 1px solid c-main
+    border-right: 1px solid c-special
     overflow: auto
     min-width: 200px
     +maxWidth(800px)
@@ -38,9 +38,9 @@ json('../variables.json')
     text-overflow: ellipsis
     margin-right: -1px
     &:hover
-        background-color: hover-background-color;
+        background-color: c-hover-transparent;
     &.isActive
-        background-color: c-main
+        background-color: c-special
         color: c-white
         cursor: default
         .arrowSvg
@@ -54,4 +54,4 @@ json('../variables.json')
     padding: 8px
     margin-right: -10px
     .arrowSvg
-        fill: c-main
+        fill: c-special

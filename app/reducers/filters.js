@@ -27,9 +27,9 @@ export default function filters(state = {}, action) {
 
         case UPDATE_FILTER:
 
-            const {filter} = action;
+            const {filterValues} = action;
 
-            return Object.assign({}, state, {[categoryId]: updateFilter(state[categoryId], filter)});
+            return Object.assign({}, state, {[categoryId]: updateFilters(state[categoryId], filterValues)});
 
         case ROUTE_TO:
 
@@ -45,10 +45,17 @@ export default function filters(state = {}, action) {
     return state;
 }
 
-function updateFilters(categoryFilters = {}, values) {
-    categoryFilters = Object.assign({values: {}}, categoryFilters);
+function updateFilters(categoryFilters = {}, values = {}) {
+    categoryFilters = Object.assign({}, categoryFilters);
 
-    categoryFilters.values = Object.assign({}, categoryFilters.values, values);
+    categoryFilters.values = Object.assign({}, categoryFilters.values);
+
+    Object.keys(values)
+        .forEach(
+            key => values[key] === null
+                ? delete categoryFilters.values[key]
+                : categoryFilters.values[key] = values[key]
+        );
 
     return categoryFilters;
 }
@@ -57,7 +64,13 @@ function updateFilter(categoryFilters = {}, {key, value}) {
 
     categoryFilters = Object.assign({values: {}}, categoryFilters);
 
-    categoryFilters.values = Object.assign({}, categoryFilters.values, {[key]: value});
+    categoryFilters.values = Object.assign({}, categoryFilters.values);
+
+    if (value === null) {
+        delete categoryFilters.values[key];
+    } else {
+        categoryFilters.values[key] = value;
+    }
 
     return categoryFilters;
 }

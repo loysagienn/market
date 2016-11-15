@@ -10,11 +10,13 @@ json('../variables.json')
     user-select(none)
 
 .themeDefault
-    background-color: c-main
+    border: 1px solid c-special
+    background-color: c-special
     color: c-white
 
     &:hover
-        background-color: c-main + #101010
+        border: 1px solid c-special + #101010
+        background-color: c-special + #101010
 
     &:active
         shadow: hover
@@ -22,20 +24,43 @@ json('../variables.json')
 
     &.disabled
         background-color: c-gray-c0
+        border: 1px solid c-gray-c0
         cursor: default
         shadow: none
         transform: none
 
-.themeTransparent
+.themeWhite
+    background-color: c-white
+    color: c-gray-40
+    border: 1px solid c-gray-f0
 
     &:hover
-        background-color: hover-background-color
+        background-color: c-gray-f0
 
     &:active
         shadow: hover
         transform: translate(0, -1px)
 
     &.disabled
+        border: 1px solid c-gray-d0
+        background-color: c-gray-d0
+        cursor: default
+        shadow: none
+        transform: none
+
+.themeTransparent
+    border: 1px solid transparent;
+
+    &:hover
+        border: 1px solid c-hover-transparent
+        background-color: c-hover-transparent
+
+    &:active
+        shadow: hover
+        transform: translate(0, -1px)
+
+    &.disabled
+        border: 1px solid transparent
         background-color: transparent
         color: c-gray-c0
         cursor: default

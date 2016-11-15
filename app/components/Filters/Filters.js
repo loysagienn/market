@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import style from './buildCssMap';
-import {Loading, Input, Tile} from '../';
+import {configClassName} from '../../common/helpers';
+import {Loading, Input, Tile, Checkbox} from '../';
 
 const filterTypes = {
     NUMERIC: 'NUMERIC',
@@ -34,48 +35,93 @@ export default class Filters extends Component {
 
     _renderFilter(filter) {
 
-        let {id, key, name} = filter;
-
-        const {routeToActualFilter, updateFilter, values} = this.props;
-
-        name = name.charAt(0).toUpperCase() + name.slice(1);
+        const {id} = filter;
 
         return (
             <div
                 key={id}
                 className={style.filterWrapper}
             >
-                <div className={style.filter}>
-                    <div className={style.filterName}>
-                        {name}
-                    </div>
-                    <div className={style.filterControl}>
-                        {renderFilterControl(filter, values[key], updateFilter, routeToActualFilter)}
-                    </div>
-                </div>
+                {
+                    this._renderFilterNode(filter)
+                }
             </div>
         )
     }
-}
 
-function renderFilterControl(filter, value, updateFilter, onBlur) {
-    const {type, key} = filter;
+    _renderFilterNode(filter) {
+        switch (filter.type) {
+            case filterTypes.NUMERIC:
 
-    const onChange = value => updateFilter({key, value});
+                return this._renderNumeric(filter);
 
-    switch (type) {
-        case filterTypes.NUMERIC:
+            case filterTypes.BOOL:
 
-            return renderNumeric(filter, value, onChange, onBlur);
+                return this._renderBool(filter);
+
+            default:
+
+                return `${filter.name} ${filter.type}`;
+        }
     }
 
-    return type;
-}
+    _renderNumeric(filter) {
 
-function renderNumeric({maxValue = null, minValue = null}, value, onChange, onBlur) {
-    return (
-        <Input value={value || ''} onChange={onChange} className={style.input} onBlur={onBlur}/>
-    );
+        let {key, name} = filter;
+
+        const {routeToActualFilter, updateFilter, values} = this.props;
+
+        const value = values[key];
+
+        name = name.charAt(0).toUpperCase() + name.slice(1);
+
+        return (
+            <div className={configClassName(style.filter, style.filterNumeric)}>
+                <div className={style.filterName}>
+                    {name}
+                </div>
+                <div className={style.filterControl}>
+                    <Input
+                        value={value || ''}
+                        onChange={value => updateFilter({[key]: value || null})}
+                        className={style.input}
+                        onBlur={routeToActualFilter}
+                    />
+                </div>
+            </div>
+        );
+    }
+
+    _renderBool(filter) {
+
+        let {key, name} = filter;
+
+        const {routeToActualFilter, updateFilter, values} = this.props;
+
+        const checked = values[key];
+
+        name = name.charAt(0).toUpperCase() + name.slice(1);
+
+        const onClick = () => {
+            updateFilter({[key]: !checked || null});
+            routeToActualFilter();
+        };
+
+        return (
+            <div className={configClassName(style.filter, style.filterBool)}>
+                <div
+                    className={style.filterName}
+                    onClick={onClick}
+                >
+                    <Checkbox
+                        checked={checked}
+                        className={style.checkbox}
+                    />
+                    {name}
+                </div>
+            </div>
+        );
+    }
 }
 
 function renderLoading() {

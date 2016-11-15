@@ -18,7 +18,7 @@ json('../variables.json')
         bottom: 0
         background-color: c-main
         .loadingSvg
-            fill: c-white
+            fill: c-special
 
 .filters
     padding: 5px;
@@ -33,8 +33,21 @@ json('../variables.json')
 .filter
     padding: 5px 0;
 
+.filterNumeric
+    display: block;
+
+.filterBool
+    display: block;
+    .filterName
+        cursor: pointer;
+
 .filterName
     padding-bottom: 5px;
+    line-height: 24px;
+
+.checkbox
+    float: left;
+    margin-right: 5px;
 
 .filterControl
     display: block;

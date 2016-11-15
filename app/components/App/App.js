@@ -1,6 +1,6 @@
 import React from 'react';
 import style from './buildCssMap';
-import {Header, IndexPage, ModelList, PageNotFound, Model, Settings, Filters} from '../';
+import {Header, IndexPage, ModelList, PageNotFound, Model, Settings, Filters, ShowHide} from '../';
 import {routeKeys} from '../../common/router/router';
 import {createLogger} from '../../common/logger';
 
