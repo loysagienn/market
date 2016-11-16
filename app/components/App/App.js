@@ -8,7 +8,7 @@ const log = createLogger(module, {console: true});
 
 export default function({routeTo, route, models}) {
 
-    log.info('render app');
+    log.custom('render app', 'color: #009688;');
 
     return (
         <div

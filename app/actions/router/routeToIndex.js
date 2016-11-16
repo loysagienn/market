@@ -24,14 +24,14 @@ export default function routeToIndex(dispatch, getState, route) {
 
     loadCategories(api, categoriesMap, rootCategoryId, rootCategoryId)
         .then(categories => dispatch(
-            {type: ROUTE_LOAD_DONE, route},
-            {type: CATEGORIES_LOAD_DONE, categories}
+            {type: CATEGORIES_LOAD_DONE, categories},
+            {type: ROUTE_LOAD_DONE, route}
         ))
         .catch(error => {
             log.error(error);
             dispatch(
-                {type: ROUTE_LOAD_FAIL, route, error},
-                {type: CATEGORIES_LOAD_FAIL, error}
+                {type: CATEGORIES_LOAD_FAIL, error},
+                {type: ROUTE_LOAD_FAIL, route, error}
             );
         });
 }
