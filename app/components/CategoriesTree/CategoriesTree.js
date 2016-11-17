@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import style from './buildCssMap';
 import {configClassName} from '../../common/helpers';
-import {Tree, ShowHide, List, SvgLoading, Button, SvgArrowLeft} from '../';
+import {Tree, ShowHide, List, SvgLoading, Button, SvgArrowLeft, Focusable} from '../';
 import {createLogger} from '../../common/logger';
 import {getSelectedTree, getSelectedTreeChildren} from '../../common/tree';
 
@@ -88,9 +88,9 @@ export default class CategoriesTree extends Component {
         );
 
         return (
-            <div
+            <Focusable
                 className={configClassName(style.main, {[style.treeOpened]: treeOpened})}
-                tabIndex="0"
+                focusGroup="global"
                 onFocus={() => this._showTree()}
                 onBlur={() => this._hideTree()}
                 ref={ref => this._mainNode = ref}
@@ -105,7 +105,7 @@ export default class CategoriesTree extends Component {
                     {this._renderTree(columns)}
                 </ShowHide>
 
-            </div>
+            </Focusable>
         );
     }
 
@@ -144,7 +144,9 @@ export default class CategoriesTree extends Component {
         const {loading, focusToCategory, categoriesMap} = this.props;
 
         return (
-            <div>
+            <div
+                onClick={event => event.stopPropagation()}
+            >
                 <Tree
                     className={style.treeComponent}
                     columns={columns}

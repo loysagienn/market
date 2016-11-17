@@ -3,6 +3,7 @@ import style from './buildCssMap';
 import {Header, IndexPage, ModelList, PageNotFound, Model, Settings, Filters, ShowHide} from '../';
 import {routeKeys} from '../../common/router/router';
 import {createLogger} from '../../common/logger';
+import {configClassName} from '../../common/helpers';
 
 const log = createLogger(module, {console: true});
 
@@ -39,7 +40,7 @@ function renderPage({route, models: {modelsMap}, routeTo}) {
         case routeKeys.models:
 
             return (
-                <div className={style.page}>
+                <div className={configClassName(style.page, style.modelsPage)}>
                     <div className={style.modelList}>
                         <ModelList/>
                     </div>

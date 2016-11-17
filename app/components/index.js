@@ -21,4 +21,5 @@ export {default as Model} from './Model/Model';
 export {default as Checkbox} from './Checkbox/Checkbox';
 export {default as Filters} from '../containers/Filters';
 export {default as Input} from './Input/Input';
+export {default as Focusable} from './Focusable/Focusable';
 export * from './Svg/Svg';

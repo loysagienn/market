@@ -20,6 +20,8 @@ json('../variables.json')
     bottom: 0
     overflow: auto
     background-color: c-main
+    &.modelsPage
+        overflow: hidden;
 
 .modelList
     position: absolute
@@ -27,6 +29,8 @@ json('../variables.json')
     right: 300px;
     top: 0;
     bottom: 0;
+    +maxWidth(800px)
+        right: 0;
 
 .filters
     position: absolute
@@ -34,3 +38,5 @@ json('../variables.json')
     bottom: 0;
     right: 0;
     width: 300px;
+    +maxWidth(800px)
+        right: -300px;

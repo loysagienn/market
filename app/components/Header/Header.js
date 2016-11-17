@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import style from './buildCssMap';
-import {CategoriesTree, SvgMenu, Tile, ShowHide} from '../';
+import {CategoriesTree, SvgMenu, Tile, ShowHide, Focusable} from '../';
 
 
 export default class Header extends Component {
@@ -65,14 +65,14 @@ export default class Header extends Component {
     _renderMenuBtn() {
 
         return (
-            <div
-                tabIndex="0"
+            <Focusable
+                focusGroup="global"
                 className={style.menuBtn}
                 onFocus={event => this._showMenu()}
                 onBlur={event => this._hideMenu()}
             >
                 <SvgMenu className={style.menuBtnSvg}/>
-            </div>
+            </Focusable>
         )
     }
 }

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import style from './buildCssMap';
 import {configClassName} from '../../common/helpers';
-import {Loading, Input, Tile, Checkbox} from '../';
+import {Loading, Input, Tile, Checkbox, Focusable, SvgFilter, Button} from '../';
 import {createLogger} from '../../common/logger';
 
 const log = createLogger(module, {console: true});
@@ -15,19 +15,30 @@ const filterTypes = {
 export default class Filters extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            isFocused: false
+        }
     }
     render() {
 
         const {loading} = this.props;
+        const {isFocused} = this.state;
 
         return (
-            <div
-                className={style.main}
+            <Focusable
+                className={configClassName(style.main, {[style.focused]: isFocused})}
+                focusGroup="global"
+                onFocus={event => this.setState({isFocused: true})}
+                onBlur={event => this.setState({isFocused: false})}
+                ref={node => this._mainNode = node}
             >
                 <Tile className={style.filters}>
                     {loading ? renderLoading() : this._renderFilters()}
                 </Tile>
-            </div>
+                <div className={style.filterBtn}>
+                    <SvgFilter className={style.filterBtnSvg}/>
+                </div>
+            </Focusable>
         )
     }
 
@@ -35,7 +46,22 @@ export default class Filters extends Component {
 
         const {filters} = this.props;
 
-        return filters.map(filter => this._renderFilter(filter));
+        return (
+            <div>
+                {filters.map(filter => this._renderFilter(filter))}
+                <div
+                    className={style.buttons}
+                    onClick={event => event.stopPropagation()}
+                >
+                    <Button
+                        className={style.button}
+                        onClick={event => this._mainNode.blur()}
+                    >
+                        OK
+                    </Button>
+                </div>
+            </div>
+        );
     }
 
     _renderFilter(filter) {

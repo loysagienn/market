@@ -5,3 +5,7 @@ export const DEFAULT_SETTINGS = {
     serverRenderingOn: true,
     preloadDataOnServer: true
 };
+
+export const KEY_CODES = {
+    esc: 27
+};
