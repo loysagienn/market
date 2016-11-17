@@ -15,6 +15,10 @@ export function routeTo({path = '', route}) {
 
         route = getRoute(path, route, getState);
 
+        if (route === null) {
+            return;
+        }
+
         dispatch({type: ROUTE_TO, route});
 
         switch (route.key) {
@@ -48,14 +52,28 @@ export function routeToActualFilter() {
 
 function getRoute(path, route, getState) {
 
-    const {categories: {rootCategoryId}} = getState();
+    const {categories: {rootCategoryId}, filters, router: {currentRoute}} = getState();
 
     route = route || getRouteByPath(path);
 
-    // При попытке перейти к рутовой категории меняем роут на главную страницу
-    if (route.key === routeKeys.models && route.categoryId === rootCategoryId) {
+    if (route.key === routeKeys.models) {
 
-        return Object.assign(getRouteByPath('/'), {childRoute: route.childRoute});
+        const {categoryId, filterKey} = route;
+
+        // При попытке перейти к рутовой категории меняем роут на главную страницу
+        if (categoryId === rootCategoryId) {
+            return Object.assign(getRouteByPath('/'), {childRoute: route.childRoute});
+        }
+
+        if (currentRoute.key === routeKeys.models && filterKey === currentRoute.filterKey) {
+            return null;
+        }
+
+        const values = filters[categoryId] ? filters[categoryId].values || null : null;
+
+        if (values !== null) {
+            return getRouteByPath(`models${stringifyQueryParams(Object.assign({categoryId}, values))}`);
+        }
     }
 
     return route;

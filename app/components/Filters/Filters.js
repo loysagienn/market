@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import style from './buildCssMap';
 import {configClassName} from '../../common/helpers';
 import {Loading, Input, Tile, Checkbox} from '../';
+import {createLogger} from '../../common/logger';
+
+const log = createLogger(module, {console: true});
 
 const filterTypes = {
     NUMERIC: 'NUMERIC',
@@ -18,7 +21,9 @@ export default class Filters extends Component {
         const {loading} = this.props;
 
         return (
-            <div className={style.main}>
+            <div
+                className={style.main}
+            >
                 <Tile className={style.filters}>
                     {loading ? renderLoading() : this._renderFilters()}
                 </Tile>
