@@ -8,8 +8,6 @@ import {stringifyQueryParams} from '../../common/helpers';
 
 const log = createLogger(module, {console: true});
 
-
-
 export function routeTo({path = '', route}) {
     return function(dispatch, getState) {
 
@@ -34,6 +32,18 @@ export function routeTo({path = '', route}) {
 
                 return routeToModel(dispatch, getState, route);
         }
+    }
+}
+
+export function routeToCategory(categoryId) {
+    return function(dispatch, getState) {
+        const {filters} = getState();
+
+        const {values = {}} = filters[categoryId] || {};
+
+        const queryParams = stringifyQueryParams(values);
+
+        dispatch(routeTo({path: `catalog-${categoryId + queryParams}`}));
     }
 }
 
@@ -67,12 +77,6 @@ function getRoute(path, route, getState) {
 
         if (currentRoute.key === routeKeys.models && filterKey === currentRoute.filterKey) {
             return null;
-        }
-
-        const values = filters[categoryId] ? filters[categoryId].values || null : null;
-
-        if (values !== null) {
-            return getRouteByPath(`catalog-${categoryId + stringifyQueryParams(values)}`);
         }
     }
 

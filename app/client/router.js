@@ -37,7 +37,6 @@ export default function({subscribe, dispatch, getState}) {
 function onChange({router: {currentRoute}}) {
     const currentRouteKey = getKeyByObject(currentRoute);
     if (activeRouteKey !== currentRouteKey) {
-        console.log('push route', currentRoute);
         updateActiveRoute(currentRoute);
         const path = getPathByRoute(currentRoute);
         window.history.pushState(currentRoute, path, path);

@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import {routeTo, focusToCategory} from '../actions/actions';
+import {routeToCategory, focusToCategory} from '../actions/actions';
 import CategoriesTree from '../components/CategoriesTree/CategoriesTree';
 
 function mapStateToProps({
@@ -16,7 +16,7 @@ function mapStateToProps({
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-    routeTo: categoryId => dispatch(routeTo({path: `catalog-${categoryId}`})),
+    routeTo: categoryId => dispatch(routeToCategory(categoryId)),
     focusToCategory: categoryId => dispatch(focusToCategory(categoryId))
 });
 
