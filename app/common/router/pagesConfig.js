@@ -35,30 +35,24 @@ export default {
         getRoute(pathItem) {
             const [path, query] = pathItem.split('?');
 
-            if (path !== 'models') {
+            const match = path.match(/^catalog-([0-9]*)$/);
+            if (!match) {
                 return null;
             }
-
-            const filter = parseQueryParams(query) || {};
-
-            const categoryId = +filter.categoryId;
+            const categoryId = +match[1];
 
             if (isNaN(categoryId)) {
                 return null;
             }
 
-            const filterValues = Object.keys(filter).reduce(
-                (filterValues, key) =>
-                    key === 'categoryId' ? filterValues : Object.assign(filterValues, {[key]: filter[key]}),
-                {}
-            );
+            const filterValues = parseQueryParams(query) || {};
 
-            const filterKey = getKeyByObject(filter);
+            const filterKey = getKeyByObject(Object.assign({categoryId}, filterValues));
 
             return {categoryId, filterValues, filterKey};
         },
         getPath({categoryId, filterValues}) {
-            return `models${stringifyQueryParams(Object.assign({}, filterValues, {categoryId}))}`;
+            return `catalog-${categoryId + stringifyQueryParams(filterValues)}`;
         },
         childRouteNodeKeys: []
     },

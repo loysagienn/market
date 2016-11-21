@@ -16,7 +16,7 @@ function mapStateToProps({
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-    routeTo: categoryId => dispatch(routeTo({path: `models?categoryId=${categoryId}`})),
+    routeTo: categoryId => dispatch(routeTo({path: `catalog-${categoryId}`})),
     focusToCategory: categoryId => dispatch(focusToCategory(categoryId))
 });
 

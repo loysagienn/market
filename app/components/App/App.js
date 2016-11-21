@@ -1,77 +1,86 @@
-import React from 'react';
+import React, {Component} from 'react';
 import style from './buildCssMap';
-import {Header, IndexPage, ModelList, PageNotFound, Model, Settings, Filters, ShowHide} from '../';
+import {Header, IndexPage, ModelList, PageNotFound, Model, Settings, Filters, Focusable} from '../';
 import {routeKeys} from '../../common/router/router';
 import {createLogger} from '../../common/logger';
 import {configClassName} from '../../common/helpers';
 
 const log = createLogger(module, {console: true});
 
-export default function({routeTo, route, models}) {
+export default class App extends Component {
+    constructor(props) {
+        super(props);
+    }
 
-    log.custom('render app', 'color: #009688;');
+    render() {
 
-    return (
-        <div
-            className={style.main}
-        >
-            <Header
-                routeTo={routeTo}
-            />
-            {
-                renderPage({route, models, routeTo})
-            }
-        </div>
-    );
-}
+        log.custom('render app', 'color: #009688;');
 
-function renderPage({route, models: {modelsMap}, routeTo}) {
+        const {routeTo} = this.props;
 
-    switch (route.key) {
+        return (
+            <Focusable
+                className={style.main}
+            >
+                <Header
+                    routeTo={routeTo}
+                />
+                {
+                    this._renderPage()
+                }
+            </Focusable>
+        );
+    }
 
-        case routeKeys.index:
+    _renderPage() {
+        const {route, models: {modelsMap}} = this.props;
 
-            return (
-                <div className={style.page}>
-                    <IndexPage/>
-                </div>
-            );
+        switch (route.key) {
 
-        case routeKeys.models:
+            case routeKeys.index:
 
-            return (
-                <div className={configClassName(style.page, style.modelsPage)}>
-                    <div className={style.modelList}>
-                        <ModelList/>
+                return (
+                    <div className={style.page}>
+                        <IndexPage/>
                     </div>
-                    <div className={style.filters}>
-                        <Filters/>
+                );
+
+            case routeKeys.models:
+
+                return (
+                    <div className={configClassName(style.page, style.modelsPage)}>
+                        <div className={style.modelList}>
+                            <ModelList/>
+                        </div>
+                        <div className={style.filters}>
+                            <Filters/>
+                        </div>
                     </div>
-                </div>
-            );
+                );
 
-        case routeKeys.model:
+            case routeKeys.model:
 
-            return (
-                <div className={style.page}>
-                    <Model model={modelsMap[route.modelId]}/>
-                </div>
-            );
+                return (
+                    <div className={style.page}>
+                        <Model model={modelsMap[route.modelId]}/>
+                    </div>
+                );
 
-        case routeKeys.settings:
+            case routeKeys.settings:
 
-            return (
-                <div className={style.page}>
-                    <Settings/>
-                </div>
-            );
+                return (
+                    <div className={style.page}>
+                        <Settings/>
+                    </div>
+                );
 
-        default:
+            default:
 
-            return (
-                <div className={style.page}>
-                    <PageNotFound/>
-                </div>
-            );
+                return (
+                    <div className={style.page}>
+                        <PageNotFound/>
+                    </div>
+                );
+        }
     }
 }

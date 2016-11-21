@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import style from './buildCssMap';
 import {configClassName} from '../../common/helpers';
+import {Focusable} from '../';
 
 
 export default class Input extends Component {
@@ -36,13 +37,21 @@ export default class Input extends Component {
         const value = this._value;
 
         return (
-            <input
-                className={configClassName(style.main, className)}
-                value={value}
-                onChange={this._onChangeHandler}
-                onFocus={event => onFocus && onFocus(event)}
-                onBlur={event => onBlur && onBlur(event)}
-            />
+            <Focusable
+                ref={node => this._node = node}
+                className={configClassName(style.main)}
+                onFocus={onFocus}
+                onBlur={onBlur}
+            >
+                <input
+                    ref={input => this._input = input}
+                    className={configClassName(style.input, className)}
+                    value={value}
+                    onChange={this._onChangeHandler}
+                    onFocus={event => this._node.focus()}
+                    onBlur={event => this._node.blur()}
+                />
+            </Focusable>
         );
     }
 }

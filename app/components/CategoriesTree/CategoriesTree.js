@@ -90,7 +90,6 @@ export default class CategoriesTree extends Component {
         return (
             <Focusable
                 className={configClassName(style.main, {[style.treeOpened]: treeOpened})}
-                focusGroup="global"
                 onFocus={() => this._showTree()}
                 onBlur={() => this._hideTree()}
                 ref={ref => this._mainNode = ref}
@@ -120,7 +119,7 @@ export default class CategoriesTree extends Component {
                 <Button
                     className={style.button}
                     onClick={() => this._clearFocused()}
-                    theme='transparent'
+                    theme='white'
                 >
                     Отменить
                 </Button>
@@ -145,7 +144,7 @@ export default class CategoriesTree extends Component {
 
         return (
             <div
-                onClick={event => event.stopPropagation()}
+                onClick={event => event.preventDefault()}
             >
                 <Tree
                     className={style.treeComponent}

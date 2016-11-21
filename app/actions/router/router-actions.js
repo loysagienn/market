@@ -43,9 +43,9 @@ export function routeToActualFilter() {
 
         const {values = {}} = filters[categoryId] || {};
 
-        const queryParams = stringifyQueryParams(Object.assign({categoryId}, values));
+        const queryParams = stringifyQueryParams(values);
 
-        dispatch(routeTo({path: `models${queryParams}`}));
+        dispatch(routeTo({path: `catalog-${categoryId + queryParams}`}));
     }
 
 }
@@ -72,7 +72,7 @@ function getRoute(path, route, getState) {
         const values = filters[categoryId] ? filters[categoryId].values || null : null;
 
         if (values !== null) {
-            return getRouteByPath(`models${stringifyQueryParams(Object.assign({categoryId}, values))}`);
+            return getRouteByPath(`catalog-${categoryId + stringifyQueryParams(values)}`);
         }
     }
 

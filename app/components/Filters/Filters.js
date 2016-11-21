@@ -27,7 +27,6 @@ export default class Filters extends Component {
         return (
             <Focusable
                 className={configClassName(style.main, {[style.focused]: isFocused})}
-                focusGroup="global"
                 onFocus={event => this.setState({isFocused: true})}
                 onBlur={event => this.setState({isFocused: false})}
                 ref={node => this._mainNode = node}
@@ -51,7 +50,6 @@ export default class Filters extends Component {
                 {filters.map(filter => this._renderFilter(filter))}
                 <div
                     className={style.buttons}
-                    onClick={event => event.stopPropagation()}
                 >
                     <Button
                         className={style.button}

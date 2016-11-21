@@ -66,7 +66,6 @@ export default class Header extends Component {
 
         return (
             <Focusable
-                focusGroup="global"
                 className={style.menuBtn}
                 onFocus={event => this._showMenu()}
                 onBlur={event => this._hideMenu()}

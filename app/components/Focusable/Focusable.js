@@ -1,59 +1,26 @@
 import React, {Component} from 'react';
-import {KEY_CODES} from '../../common/constants';
-import {configClassName} from '../../common/helpers';
 
 
+let focusedStack = [];
 
-const focusGroups = {};
+let focusComponent = null;
 
-const usedPropsKeys = new Set(['focusGroup', 'onFocus', 'onBlur', 'onClick']);
+const selfPropKeys = new Set(['onFocus', 'onBlur', 'onClick']);
+
 
 export default class Focusable extends Component {
     constructor(props) {
         super(props);
 
+        this._isFocused = false;
         this._onClickHandler = event => this._onClick(event);
-        this._onKeyDownHandler = event => this._onKeyDown(event);
-        this._onWindowClick = event => this.blur();
     }
 
-    componentDidMount() {
-        window.addEventListener('click', this._onWindowClick);
-        window.addEventListener('keydown', this._onKeyDownHandler);
-    }
-
-    componentWillUnmount() {
-
-        window.removeEventListener('click', this._onWindowClick);
-        window.removeEventListener('keydown', this._onKeyDownHandler);
-
-        if (this.isFocused) {
-            delete focusGroups[this.props.focusGroup];
-        }
-
-    }
-
-    _onKeyDown(event) {
-
-        const{onKeyDown} = this.props;
-
-        if (onKeyDown) {
-            onKeyDown(event);
-            if (event.defaultPrevented) {
-                return;
-            }
-        }
-
-        const {keyCode} = event;
-
-        if (keyCode === KEY_CODES.esc) {
-            this.blur();
-        }
+    getChildContext() {
+        return Object.assign({}, this.context, {parentFocusable: this});
     }
 
     _onClick(event) {
-
-        event.stopPropagation();
 
         const {onClick} = this.props;
 
@@ -65,63 +32,102 @@ export default class Focusable extends Component {
             return;
         }
 
-        this.focus();
+        const {parentFocusable} = this.context;
+
+        focusComponent = focusComponent || this;
+
+        if (!parentFocusable) {
+            focusComponent.focus();
+            focusComponent = null;
+        }
+    }
+
+    get parentFocusable() {
+        return this.context.parentFocusable || null;
     }
 
     focus() {
-        if (this.isFocused) {
-            return;
-        }
 
-        const {focusGroup, onFocus} = this.props;
-
-        if (focusGroup in focusGroups) {
-            focusGroups[focusGroup].blur(this);
-        }
-
-        focusGroups[focusGroup] = this;
-
-        if (onFocus) {
-            onFocus();
-        }
+        focusToNode(this);
     }
 
-    blur(nextFocusNode = null) {
-        if (!this.isFocused) {
+    blur() {
+        if (!this._isFocused) {
             return;
         }
 
-        const {focusGroup, onBlur} = this.props;
-
-        delete focusGroups[focusGroup];
-
-        if (onBlur) {
-            onBlur({nextFocusNode});
-        }
+        focusToNode(this.parentFocusable);
     }
 
     render() {
 
         const {props} = this;
 
-        const otherProps = Object.keys(props).reduce(
-            (otherProps, key) => usedPropsKeys.has(key)
-                ? otherProps
-                : Object.assign(otherProps, {[key]: props[key]}),
+        const passProps = Object.keys(props).reduce(
+            (passProps, key) => selfPropKeys.has(key)
+                ? passProps
+                : Object.assign(passProps, {[key]: props[key]}),
             {}
         );
 
         return <div
             onClick={this._onClickHandler}
-            {...otherProps}
+            {...passProps}
         />
     }
 
     get isFocused() {
-        return focusGroups[this.props.focusGroup] === this;
+        return this._isFocused;
     }
 
-    static getFocusedNode(focusGroup) {
-        return focusGroups[focusGroup] || null;
+    set isFocused(isFocused) {
+        if (isFocused === this._isFocused) {
+            return;
+        }
+
+        this._isFocused = isFocused;
+
+        if (isFocused) {
+            const {onFocus} = this.props;
+
+            if (onFocus) {
+                onFocus();
+            }
+        } else {
+            const {onBlur} = this.props;
+
+            if (onBlur) {
+                onBlur();
+            }
+        }
     }
+}
+
+Focusable.childContextTypes = {
+    parentFocusable: React.PropTypes.object
+};
+
+Focusable.contextTypes = {
+    parentFocusable: React.PropTypes.object
+};
+
+function focusToNode(item) {
+    const newFocusStack = [];
+
+    while(item) {
+        newFocusStack.unshift(item);
+        item = item.parentFocusable;
+    }
+
+    let i = 0;
+
+    while (newFocusStack[i] === focusedStack[i] && i < newFocusStack.length) {
+        i++;
+    }
+
+    focusedStack.slice(i).reverse().forEach(item => item.isFocused = false);
+
+    newFocusStack.slice(i).forEach(item => item.isFocused = true);
+
+    focusedStack = newFocusStack;
 }
