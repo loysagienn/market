@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import style from './buildCssMap';
-import {Header, IndexPage, ModelList, PageNotFound, Model, Settings, Filters, Focusable} from '../';
+import {Header, IndexPage, ModelList, PageNotFound, Model, Settings, Filters} from '../';
 import {routeKeys} from '../../common/router/router';
 import {createLogger} from '../../common/logger';
 import {configClassName} from '../../common/helpers';
@@ -19,7 +19,7 @@ export default class App extends Component {
         const {routeTo} = this.props;
 
         return (
-            <Focusable
+            <div
                 className={style.main}
             >
                 <Header
@@ -28,7 +28,7 @@ export default class App extends Component {
                 {
                     this._renderPage()
                 }
-            </Focusable>
+            </div>
         );
     }
 

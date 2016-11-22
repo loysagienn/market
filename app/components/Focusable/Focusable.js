@@ -1,14 +1,9 @@
 import React, {Component} from 'react';
 
 
-let focusedStack = [];
-
-let focusComponent = null;
-
-const selfPropKeys = new Set(['onFocus', 'onBlur', 'onClick']);
-
 /**
- * Компонент, на который можно поставить фокус, не использует браузерный фокус и tabindex
+ * Компонент, на который можно поставить фокус
+ * Не используется браузерный фокус и tabindex
  * Почему просто не использовать браузерный фокус? С браузерным фокусом, если внутри одного
  * фокусируемого элемента находится другой фокусируемый элемент, то при переходе фокуса из
  * родительского к дочернему на родительском триггерится blur, а это не нужно во всех кейсах,
@@ -28,9 +23,10 @@ const selfPropKeys = new Set(['onFocus', 'onBlur', 'onClick']);
  * Переносим фокус на C - на E и D сработает onBlur, на C - onFocus
  * Переносим фокус на B - на C сработает onBlur
  *
- * Фокус ставится при клике на элемент, причем в тот момент, когда событие всплывет до корневого
- * фокусируемого элемента. Если где-то по пути в событии onClick у объекта события вызвали preventDefault,
- * то фокус не поставится
+ * Фокус ставится при клике на элемент
+ * Если где-то при всплытии в событии onClick у объекта события вызвали preventDefault, то фокус не поставится
+ *
+ * Не работает псевдокласс :focus, если нужно, то в событиях onFocus и onBlur придется ставить отдельный класс
  */
 export default class Focusable extends Component {
     constructor(props) {
@@ -45,47 +41,39 @@ export default class Focusable extends Component {
     }
 
     _onClick(event) {
-
         const {onClick} = this.props;
 
         if (onClick) {
             onClick(event);
         }
 
-        const {parentFocusable} = this.context;
-
-        focusComponent = focusComponent || this;
-
-        if (!parentFocusable) {
-            if (!event.defaultPrevented) {
-                focusComponent.focus();
-            }
-            focusComponent = null;
+        if (event.defaultPrevented || clickHandled) {
+            return;
         }
+
+        this.focus();
+
+        clickHandled = true;
+
+        // сбрасываем флаг clickHandled
+        // этот флаг сбросится, когда событие всплывет до window, но если где-то будет вызван
+        // stopPropagation, то флаг сбросится по таймауту
+        resetClickHandledTimeout = setTimeout(() => {
+            clickHandled = false;
+            resetClickHandledTimeout = null;
+        }, RESET_CLICK_HANDLED_TIMEOUT);
     }
 
-    get parentFocusable() {
-        return this.context.parentFocusable || null;
-    }
-
-    /**
-     * Ставит фокус на элемент
-     */
     focus() {
-
-        focusToNode(this);
+        focusToComponent(this);
     }
 
-    /**
-     * Если элемент находится в фокусе - ставит фокус на родительский фокусируемый элемент,
-     * иначе ничего не делает
-     */
     blur() {
         if (!this._isFocused) {
             return;
         }
 
-        focusToNode(this.parentFocusable);
+        focusToComponent(this.parentFocusable);
     }
 
     render() {
@@ -105,14 +93,15 @@ export default class Focusable extends Component {
         />
     }
 
-    /**
-     * Находится ли элемент в фокусе
-     */
+    get parentFocusable() {
+        return this.context.parentFocusable || null;
+    }
+
     get isFocused() {
         return this._isFocused;
     }
 
-    set isFocused(isFocused) {
+    setIsFocused(isFocused) {
         if (isFocused === this._isFocused) {
             return;
         }
@@ -143,23 +132,55 @@ Focusable.contextTypes = {
     parentFocusable: React.PropTypes.object
 };
 
-function focusToNode(item) {
-    const newFocusStack = [];
+const RESET_CLICK_HANDLED_TIMEOUT = 10;
 
-    while(item) {
-        newFocusStack.unshift(item);
-        item = item.parentFocusable;
+// массив компонентов, которые в данный момент находятся в фокусе
+let currentFocusComponentStack = [];
+
+// используется, чтобы не ставить фокус последовательно на все родителькие focusable элементы при всплытии события
+let clickHandled = false;
+
+let resetClickHandledTimeout = null;
+
+if (typeof window !== 'undefined') {
+    window.addEventListener('click', onWindowClick);
+}
+
+/**
+ * Поставить фокус на компонент
+ * @param focusComponent компонент, на который надо поставить фокус, если null - убрать фокус со всех элементов
+ */
+function focusToComponent(focusComponent = null) {
+
+    const newFocusComponentStack = [];
+
+    while(focusComponent) {
+        newFocusComponentStack.unshift(focusComponent);
+        focusComponent = focusComponent.parentFocusable;
     }
 
     let i = 0;
 
-    while (newFocusStack[i] === focusedStack[i] && i < newFocusStack.length) {
-        i++;
-    }
+    while (newFocusComponentStack[i] === currentFocusComponentStack[i] && i < newFocusComponentStack.length) i++;
 
-    focusedStack.slice(i).reverse().forEach(item => item.isFocused = false);
+    currentFocusComponentStack.slice(i).reverse().forEach(component => component.setIsFocused(false));
 
-    newFocusStack.slice(i).forEach(item => item.isFocused = true);
+    newFocusComponentStack.slice(i).forEach(component => component.setIsFocused(true));
 
-    focusedStack = newFocusStack;
+    currentFocusComponentStack = newFocusComponentStack;
 }
+
+function onWindowClick(event) {
+    if (clickHandled) {
+        clickHandled = false;
+        if (resetClickHandledTimeout !== null) {
+            clearTimeout(resetClickHandledTimeout);
+            resetClickHandledTimeout = null;
+        }
+    } else if (!event.defaultPrevented) {
+        focusToComponent(null);
+    }
+}
+
+// props'ы, которые специально обрабатываются в компоненте, остальные в том же виде добавляются в div
+const selfPropKeys = new Set(['onFocus', 'onBlur', 'onClick']);
