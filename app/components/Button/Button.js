@@ -8,11 +8,6 @@ const themes = {
     white: style.themeWhite
 };
 
-function onClickHandler(event, onClick) {
-    event.preventDefault();
-    onClick(event);
-}
-
 export default ({children, onClick, className, disabled, theme}) => (
     <div
         className={configClassName(
@@ -21,7 +16,7 @@ export default ({children, onClick, className, disabled, theme}) => (
             themes[theme] || themes.default,
             {[style.disabled]: disabled}
         )}
-        onClick={event => onClickHandler(event, onClick)}
+        onClick={onClick}
     >
         {children}
     </div>

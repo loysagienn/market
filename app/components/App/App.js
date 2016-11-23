@@ -45,7 +45,7 @@ export default class App extends Component {
                     </div>
                 );
 
-            case routeKeys.models:
+            case routeKeys.catalog:
 
                 return (
                     <div className={configClassName(style.page, style.modelsPage)}>

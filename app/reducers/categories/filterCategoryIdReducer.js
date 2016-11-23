@@ -8,7 +8,7 @@ export default function filterCategoryIdReducer(state, action, rootCategoryId) {
 
         const {route} = action;
 
-        if (route.key === routeKeys.models) {
+        if (route.key === routeKeys.catalog) {
             return route.categoryId || rootCategoryId;
         }
 

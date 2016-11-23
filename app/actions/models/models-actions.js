@@ -16,7 +16,7 @@ export function loadMoreModels() {
 
         const {models: {modelsFilterMap, pagesCount, loading}, router: {currentRoute}} = getState();
 
-        if (loading || currentRoute.key !== routeKeys.models) {
+        if (loading || currentRoute.key !== routeKeys.catalog) {
             return null;
         }
 

@@ -24,7 +24,7 @@ export function routeTo({path = '', route}) {
 
                 return routeToIndex(dispatch, getState, route);
 
-            case routeKeys.models:
+            case routeKeys.catalog:
 
                 return routeToFilter(dispatch, getState, route);
 
@@ -66,7 +66,7 @@ function getRoute(path, route, getState) {
 
     route = route || getRouteByPath(path);
 
-    if (route.key === routeKeys.models) {
+    if (route.key === routeKeys.catalog) {
 
         const {categoryId, filterKey} = route;
 
@@ -75,7 +75,7 @@ function getRoute(path, route, getState) {
             return Object.assign(getRouteByPath('/'), {childRoute: route.childRoute});
         }
 
-        if (currentRoute.key === routeKeys.models && filterKey === currentRoute.filterKey) {
+        if (currentRoute.key === routeKeys.catalog && filterKey === currentRoute.filterKey) {
             return null;
         }
     }

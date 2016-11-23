@@ -65,8 +65,8 @@ export default function configurePage(route, req) {
         };
 
         if (preloadDataOnServer) {
-            dispatch(routeTo({route}));
             subscribe(() => resolvePage());
+            dispatch(routeTo({route}));
         } else {
             resolvePage();
         }

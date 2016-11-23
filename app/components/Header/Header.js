@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import style from './buildCssMap';
-import {CategoriesTree, SvgMenu, Tile, ShowHide, Focusable} from '../';
+import {CategoriesTree, SvgMenu, Tile, ShowHide, Focusable, Popup} from '../';
 
 
 export default class Header extends Component {
@@ -28,9 +28,6 @@ export default class Header extends Component {
                     <CategoriesTree/>
                 </div>
                 {this._renderMenuBtn()}
-                <ShowHide className={style.menu}>
-                    {this._renderMenu()}
-                </ShowHide>
             </div>
         )
     }
@@ -44,21 +41,30 @@ export default class Header extends Component {
         const {routeTo} = this.props;
 
         return (
-            <Tile className={style.menuTile}>
-                <a
-                    className={style.menuItem}
-                    href="https://github.com/loysagienn/market"
-                    target="_blank"
-                >
-                    Github
-                </a>
-                <div
-                    className={style.menuItem}
-                    onMouseDown={event => routeTo({path: '/settings'})}
-                >
-                    Настройки
-                </div>
-            </Tile>
+            <Popup
+                onClick={event => {
+                    event.nativeEvent.preventFocus = true;
+                    this._focusable.blur();
+                }}
+                className={style.menu}
+                position="bottom right"
+            >
+                <Tile className={style.menuTile}>
+                    <a
+                        className={style.menuItem}
+                        href="https://github.com/loysagienn/market"
+                        target="_blank"
+                    >
+                        Github
+                    </a>
+                    <div
+                        className={style.menuItem}
+                        onClick={event => routeTo({path: '/settings'})}
+                    >
+                        Настройки
+                    </div>
+                </Tile>
+            </Popup>
         )
     }
 
@@ -66,11 +72,15 @@ export default class Header extends Component {
 
         return (
             <Focusable
+                ref={focusable => this._focusable = focusable}
                 className={style.menuBtn}
                 onFocus={event => this._showMenu()}
                 onBlur={event => this._hideMenu()}
             >
                 <SvgMenu className={style.menuBtnSvg}/>
+                <ShowHide>
+                    {this._renderMenu()}
+                </ShowHide>
             </Focusable>
         )
     }

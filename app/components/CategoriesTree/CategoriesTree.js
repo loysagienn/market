@@ -144,7 +144,7 @@ export default class CategoriesTree extends Component {
 
         return (
             <div
-                onClick={event => event.preventDefault()}
+                onClick={event => event.nativeEvent.preventFocus = true}
             >
                 <Tree
                     className={style.treeComponent}

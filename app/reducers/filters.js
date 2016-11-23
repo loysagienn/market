@@ -35,7 +35,7 @@ export default function filters(state = {}, action) {
 
             const {route} = action;
 
-            if (route.key === routeKeys.models) {
+            if (route.key === routeKeys.catalog) {
                 const {categoryId, filterValues} = route;
                 return Object.assign({}, state, {[categoryId]: updateFilters(state[categoryId], filterValues)});
             }

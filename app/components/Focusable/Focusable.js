@@ -24,7 +24,7 @@ import React, {Component} from 'react';
  * Переносим фокус на B - на C сработает onBlur
  *
  * Фокус ставится при клике на элемент
- * Если где-то при всплытии в событии onClick у объекта события вызвали preventDefault, то фокус не поставится
+ * Если нужно отменить фокусировку при клике, нужно в обработчике onClick написать event.nativeEvent.preventFocus = true
  *
  * Не работает псевдокласс :focus, если нужно, то в событиях onFocus и onBlur придется ставить отдельный класс
  */
@@ -47,7 +47,7 @@ export default class Focusable extends Component {
             onClick(event);
         }
 
-        if (event.defaultPrevented || clickHandled) {
+        if (event.nativeEvent.preventFocus || clickHandled) {
             return;
         }
 
@@ -177,7 +177,7 @@ function onWindowClick(event) {
             clearTimeout(resetClickHandledTimeout);
             resetClickHandledTimeout = null;
         }
-    } else if (!event.defaultPrevented) {
+    } else if (!event.preventFocus) {
         focusToComponent(null);
     }
 }

@@ -53,7 +53,10 @@ export default class Filters extends Component {
                 >
                     <Button
                         className={style.button}
-                        onClick={event => this._mainNode.blur()}
+                        onClick={event => {
+                            event.nativeEvent.preventFocus = true;
+                            this._mainNode.blur();
+                        }}
                     >
                         OK
                     </Button>

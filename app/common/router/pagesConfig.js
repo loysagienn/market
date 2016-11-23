@@ -31,7 +31,7 @@ export default {
         },
         childRouteNodeKeys: []
     },
-    models: {
+    catalog: {
         getRoute(pathItem) {
             const [path, query] = pathItem.split('?');
 
@@ -86,6 +86,19 @@ export default {
         },
         getPath() {
             return 'settings';
+        },
+        childRouteNodeKeys: []
+    },
+    examples: {
+        getRoute(pathItem) {
+            if (pathItem === 'examples') {
+                return {};
+            }
+
+            return null;
+        },
+        getPath() {
+            return 'examples';
         },
         childRouteNodeKeys: []
     }
