@@ -52,17 +52,18 @@ json('../variables.json')
         min-width: 120px;
 
 .filters
-    padding: 5px;
+    padding: 5px 0;
 
 .filterWrapper
     box-sizing: border-box;
-    padding: 5px;
     //border-bottom: 1px solid rgba(0,0,0,0.1);
     &:last-child
         border-bottom: 0;
 
 .filter
-    padding: 5px 0;
+    padding: 10px;
+    &:hover
+        background-color: c-gray-f8;
 
 .filterNumeric
     display: block;
@@ -73,7 +74,6 @@ json('../variables.json')
         cursor: pointer;
 
 .filterName
-    padding-bottom: 5px;
     line-height: 24px;
 
 .checkbox
@@ -81,8 +81,15 @@ json('../variables.json')
     margin-right: 5px;
 
 .filterControl
+    padding-top: 5px;
     display: block;
 
 .input
     margin: 0 -2px;
     padding: 5px 2px;
+
+.enumatorFilterItem
+    padding: 2px;
+    border-bottom: 1px solid rgba(0,0,0,0.03);
+    line-height: 24px;
+    cursor: pointer;

@@ -47,21 +47,13 @@ export default class Focusable extends Component {
             onClick(event);
         }
 
-        if (event.nativeEvent.preventFocus || clickHandled) {
+        if (event.nativeEvent.preventFocus) {
             return;
         }
 
         this.focus();
 
-        clickHandled = true;
-
-        // сбрасываем флаг clickHandled
-        // этот флаг сбросится, когда событие всплывет до window, но если где-то будет вызван
-        // stopPropagation, то флаг сбросится по таймауту
-        resetClickHandledTimeout = setTimeout(() => {
-            clickHandled = false;
-            resetClickHandledTimeout = null;
-        }, RESET_CLICK_HANDLED_TIMEOUT);
+        event.nativeEvent.preventFocus = true;
     }
 
     focus() {
@@ -132,18 +124,12 @@ Focusable.contextTypes = {
     parentFocusable: React.PropTypes.object
 };
 
-const RESET_CLICK_HANDLED_TIMEOUT = 10;
 
 // массив компонентов, которые в данный момент находятся в фокусе
 let currentFocusComponentStack = [];
 
-// используется, чтобы не ставить фокус последовательно на все родителькие focusable элементы при всплытии события
-let clickHandled = false;
-
-let resetClickHandledTimeout = null;
-
 if (typeof window !== 'undefined') {
-    window.addEventListener('click', onWindowClick);
+    window.addEventListener('click', event => event.preventFocus ? null : focusToComponent(null));
 }
 
 /**
@@ -168,18 +154,6 @@ function focusToComponent(focusComponent = null) {
     newFocusComponentStack.slice(i).forEach(component => component.setIsFocused(true));
 
     currentFocusComponentStack = newFocusComponentStack;
-}
-
-function onWindowClick(event) {
-    if (clickHandled) {
-        clickHandled = false;
-        if (resetClickHandledTimeout !== null) {
-            clearTimeout(resetClickHandledTimeout);
-            resetClickHandledTimeout = null;
-        }
-    } else if (!event.preventFocus) {
-        focusToComponent(null);
-    }
 }
 
 // props'ы, которые специально обрабатываются в компоненте, остальные в том же виде добавляются в div
