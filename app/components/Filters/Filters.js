@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
 import style from './buildCssMap';
 import {configClassName} from '../../common/helpers';
-import {Loading, Input, Tile, Checkbox, Focusable, SvgFilter, Button} from '../';
+import {Loading, Input, Tile, Checkbox, Focusable, SvgFilter, Button, FilterEnum} from '../';
 import {createLogger} from '../../common/logger';
 
 const log = createLogger(module, {console: true});
 
 const filterTypes = {
     NUMERIC: 'NUMERIC',
-    ENUMERATOR: 'ENUMERATOR',
+    ENUM: 'ENUMERATOR',
     BOOL: 'BOOL'
 };
 
@@ -91,9 +91,9 @@ export default class Filters extends Component {
 
                 return this._renderBool(filter);
 
-            case filterTypes.ENUMERATOR:
+            case filterTypes.ENUM:
 
-                return this._renderEnumator(filter);
+                return this._renderEnum(filter);
 
             default:
 
@@ -159,106 +159,20 @@ export default class Filters extends Component {
         );
     }
 
-    _renderEnumator(filter) {
+    _renderEnum(filter) {
 
         const {key} = filter;
 
         const {routeToActualFilter, updateFilter, values} = this.props;
 
         return (
-            <FilterEnumator
+            <FilterEnum
                 routeToActualFilter={routeToActualFilter}
                 updateFilter={updateFilter}
                 selectedItems={values[key]}
                 filter={filter}
             />
         );
-    }
-}
-
-class FilterEnumator extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            isFocused: false
-        };
-
-        this._onNameClickHandler = event => this._onNameClick(event);
-    }
-
-    _toggleItem(valueId) {
-        const {routeToActualFilter, updateFilter, filter: {key}} = this.props;
-
-        if (this._selectedItems[valueId]) {
-            delete this._selectedItems[valueId];
-        } else {
-            this._selectedItems[valueId] = true;
-        }
-        updateFilter({[key]: Object.keys(this._selectedItems).join(',') || null});
-        routeToActualFilter();
-    }
-
-    render() {
-        const {filter: {name}, selectedItems = ''} = this.props;
-
-        this._selectedItems = selectedItems
-            .split(',')
-            .reduce((items, key) => key ? Object.assign(items, {[key]: true}) : items, {});
-
-        return (
-            <Focusable
-                className={configClassName(style.filter, style.filterEnumator)}
-                onFocus={() => this.setState({isFocused: true})}
-                onBlur={() => this.setState({isFocused: false})}
-                ref={focusable => this._focusable = focusable}
-            >
-                <div
-                    className={style.filterName}
-                    onClick={this._onNameClickHandler}
-                >
-                    {name}
-                </div>
-                {this._renderFilterControl()}
-            </Focusable>
-        )
-    }
-
-    _onNameClick(event) {
-        if (this.state.isFocused) {
-            event.nativeEvent.preventFocus = true;
-
-            this._focusable.blur();
-        }
-    }
-
-    _renderFilterControl() {
-        if (!this.state.isFocused) {
-            return;
-        }
-
-        const {filter: {options}} = this.props;
-
-        return (
-            <div className={style.filterControl}>
-                {options.map(option => this._renderEnumatorOption(option))}
-            </div>
-        )
-    }
-
-    _renderEnumatorOption({type, valueId, valueText}) {
-        const checked = valueId in this._selectedItems;
-
-        return (
-            <div
-                key={valueId}
-                onClick={() => this._toggleItem(valueId)}
-                className={style.enumatorFilterItem}
-            >
-                <Checkbox checked={checked} className={style.checkbox}/>
-                {valueText}
-            </div>
-        )
     }
 }
 
