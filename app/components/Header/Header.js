@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import style from './buildCssMap';
-import {CategoriesTree, SvgMenu, Tile, ShowHide, Focusable, Popup} from '../';
+import {CategoriesTree, SvgMenu, Tile, Focusable, Popup} from '../';
 
 
 export default class Header extends Component {
@@ -34,12 +34,6 @@ export default class Header extends Component {
 
     _renderMenu() {
 
-        if (!this.state.menuVisible) {
-            return null;
-        }
-
-        const {routeTo} = this.props;
-
         return (
             <Popup
                 onClick={event => {
@@ -48,23 +42,37 @@ export default class Header extends Component {
                 }}
                 className={style.menu}
                 position="bottom right"
+                animationType="opacity"
             >
-                <Tile className={style.menuTile}>
-                    <a
-                        className={style.menuItem}
-                        href="https://github.com/loysagienn/market"
-                        target="_blank"
-                    >
-                        Github
-                    </a>
-                    <div
-                        className={style.menuItem}
-                        onClick={event => routeTo({path: '/settings'})}
-                    >
-                        Настройки
-                    </div>
-                </Tile>
+                {this._renderMenuTile()}
             </Popup>
+        );
+    }
+
+    _renderMenuTile() {
+
+        if (!this.state.menuVisible) {
+            return null;
+        }
+
+        const {routeTo} = this.props;
+
+        return (
+            <Tile className={style.menuTile}>
+                <a
+                    className={style.menuItem}
+                    href="https://github.com/loysagienn/market"
+                    target="_blank"
+                >
+                    Github
+                </a>
+                <div
+                    className={style.menuItem}
+                    onClick={event => routeTo({path: '/settings'})}
+                >
+                    Настройки
+                </div>
+            </Tile>
         )
     }
 
@@ -78,9 +86,7 @@ export default class Header extends Component {
                 onBlur={event => this._hideMenu()}
             >
                 <SvgMenu className={style.menuBtnSvg}/>
-                <ShowHide>
-                    {this._renderMenu()}
-                </ShowHide>
+                {this._renderMenu()}
             </Focusable>
         )
     }

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import style from './buildCssMap';
 import {configClassName} from '../../common/helpers';
 
@@ -9,15 +9,32 @@ const visibilityStates = {
     showInProcess: 'showInProcess'
 };
 
-export default class ShowHide extends Component {
+const animationTypes = {
+    opacity: style.animationOpacity,
+    height: style.animationHeight
+};
+
+class ShowHideClient extends Component {
 
     constructor(props) {
         super(props);
 
-        this.state = this._checkVisibilityState(props) || {};
+        this.state = {
+            visibilityState: props.children ? visibilityStates.visible : visibilityStates.hidden
+        };
 
         this._timeout = null;
         this._children = null;
+        this._onResizeHandler = event => this._onResize(event);
+    }
+
+    componentDidMount() {
+        this._checkHeight();
+        window.addEventListener('resize', this._onResizeHandler);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this._onResizeHandler);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -26,6 +43,30 @@ export default class ShowHide extends Component {
         if (newState !== null) {
             this.setState(newState);
         }
+    }
+
+    componentDidUpdate() {
+        this._checkHeight();
+    }
+
+    _onResize() {
+        this._checkHeight();
+    }
+
+    _checkHeight() {
+        const {animationType} = this.props;
+
+        if (animationType !== 'height') {
+            return;
+        }
+
+        if (!this._mainNode) {
+            return;
+        }
+
+        this._mainNode.style.height = this.state.visibilityState === visibilityStates.visible
+            ? this._wrapper.offsetHeight + 'px'
+            : '0px';
     }
 
     _checkVisibilityState(props) {
@@ -92,20 +133,52 @@ export default class ShowHide extends Component {
         }
 
         const {showInProcess, hideInProcess} = visibilityStates;
-        const {className} = this.props;
+        const {className, animationType, onClick} = this.props;
         const children = this._children;
         const hidden = visibilityState === hideInProcess || visibilityState === showInProcess;
 
+        const animationClassName = animationTypes[animationType] || animationTypes.opacity;
+
         return (
             <div
-                className={configClassName(style.main, className, {[style.hidden]: hidden})}
+                ref={node => this._mainNode = node}
+                onClick={onClick}
+                className={configClassName(style.main, className, animationClassName, {[style.hidden]: hidden})}
             >
-                {children}
+                <div ref={wrapper => this._wrapper = wrapper}>
+                    {children}
+                </div>
             </div>
         );
     }
 }
 
+function ShowHideServer({children, className, animationType, onClick}) {
+    if (!children) {
+        return null;
+    }
+
+    const animationClassName = animationTypes[animationType] || animationTypes.opacity;
+
+    return (
+        <div
+            className={configClassName(style.main, className, animationClassName)}
+            onClick={onClick}
+        >
+            <div>
+                {children}
+            </div>
+        </div>
+    )
+}
+
+const ShowHide = typeof window === 'undefined' ? ShowHideServer : ShowHideClient;
+
+
 ShowHide.propTypes = {
-    className: React.PropTypes.string
+    className: PropTypes.string,
+    animationType: PropTypes.oneOf(Object.keys(animationTypes)),
+    onClick: PropTypes.func
 };
+
+export default ShowHide;

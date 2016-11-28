@@ -3,8 +3,15 @@ json('../variables.json')
 
 .main
     display: block
-    opacity: 1
-    transition: opacity 0.3s ease;
+    &.animationOpacity
+        opacity: 1
+        transition: opacity 0.3s ease;
+    &.animationHeight
+        overflow: hidden;
+        transition: height 0.3s ease;
 
 .hidden
-    opacity: 0
+    &.animationOpacity
+        opacity: 0
+    &.animationHeight
+        height: 0;

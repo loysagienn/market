@@ -7,7 +7,7 @@ const crashReporter = store => next => action => {
     try {
         return next(action);
     } catch (error) {
-        log.error('error dispatching', action, error);
+        log.custom('error dispatching', 'color: red;', action, error);
     }
 };
 

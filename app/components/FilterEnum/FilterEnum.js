@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
+import {configClassName} from '../../common/helpers';
+import {Focusable, Checkbox, ShowHide} from '../';
 import style from './buildCssMap';
+
 
 export default class FilterEnum extends Component {
     constructor(props) {
@@ -44,7 +47,11 @@ export default class FilterEnum extends Component {
                 >
                     {name}
                 </div>
-                {this._renderFilterControl()}
+                <ShowHide
+                    animationType="height"
+                >
+                    {this._renderFilterControl()}
+                </ShowHide>
             </Focusable>
         )
     }
@@ -59,7 +66,7 @@ export default class FilterEnum extends Component {
 
     _renderFilterControl() {
         if (!this.state.isFocused) {
-            return;
+            return null;
         }
 
         const {filter: {options}} = this.props;
