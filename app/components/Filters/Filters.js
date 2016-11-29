@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import style from './buildCssMap';
 import {configClassName} from '../../common/helpers';
-import {Loading, Input, Tile, Checkbox, Focusable, SvgFilter, Button, FilterEnum} from '../';
+import {Loading, Input, Tile, Checkbox, Focusable, SvgFilter, Button, FilterEnum, FilterNumeric} from '../';
 import {createLogger} from '../../common/logger';
 
 const log = createLogger(module, {console: true});
@@ -103,29 +103,18 @@ export default class Filters extends Component {
 
     _renderNumeric(filter) {
 
-        let {key, name} = filter;
+        const {key} = filter;
 
         const {routeToActualFilter, updateFilter, values} = this.props;
 
-        const value = values[key];
-
-        name = name.charAt(0).toUpperCase() + name.slice(1);
-
         return (
-            <div className={configClassName(style.filter, style.filterNumeric)}>
-                <div className={style.filterName}>
-                    {name}
-                </div>
-                <div className={style.filterControl}>
-                    <Input
-                        value={value || ''}
-                        onChange={value => updateFilter({[key]: value || null})}
-                        className={style.input}
-                        onBlur={routeToActualFilter}
-                    />
-                </div>
-            </div>
-        );
+            <FilterNumeric
+                filter={filter}
+                selected={values[key]}
+                updateFilter={updateFilter}
+                routeToActualFilter={routeToActualFilter}
+            />
+        )
     }
 
     _renderBool(filter) {

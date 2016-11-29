@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import style from './buildCssMap';
 import {configClassName} from '../../common/helpers';
 import {Focusable} from '../';
@@ -7,34 +7,17 @@ import {Focusable} from '../';
 export default class Input extends Component {
     constructor(props) {
         super(props);
-        this._setValue(props.value);
 
         this._onChangeHandler = event => this._onChange(event);
     }
-    componentWillReceiveProps(nextProps) {
-        this._setValue(nextProps.value);
-    }
-    _setValue(value) {
-        return this._value = value;
-    }
     get value() {
-        return this._value;
+        return this._input.value;
     }
     _onChange(event) {
-        const prevValue = this._value;
-        const value = this._setValue(event.target.value);
-
-        if (value === prevValue) {
-            return;
-        }
-
-        // this.forceUpdate();
-        this.props.onChange(value);
+        this.props.onChange(event.target.value);
     }
     render() {
-        const {className, onFocus, onBlur} = this.props;
-
-        const value = this._value;
+        const {className, onFocus, onBlur, value} = this.props;
 
         return (
             <Focusable
@@ -55,3 +38,11 @@ export default class Input extends Component {
         );
     }
 }
+
+Input.propTypes = {
+    value: PropTypes.any.isRequired,
+    onChange: PropTypes.func.isRequired,
+    className: PropTypes.string,
+    onFocus: PropTypes.func,
+    onBlur: PropTypes.func
+};

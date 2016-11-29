@@ -25,4 +25,5 @@ export {default as Focusable} from './Focusable/Focusable';
 export {default as Examples} from './Examples/Examples';
 export {default as Popup} from './Popup/Popup';
 export {default as FilterEnum} from './FilterEnum/FilterEnum';
+export {default as FilterNumeric} from './FilterNumeric/FilterNumeric';
 export * from './Svg/Svg';
