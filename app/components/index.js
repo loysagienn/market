@@ -26,4 +26,6 @@ export {default as Examples} from './Examples/Examples';
 export {default as Popup} from './Popup/Popup';
 export {default as FilterEnum} from './FilterEnum/FilterEnum';
 export {default as FilterNumeric} from './FilterNumeric/FilterNumeric';
+export {default as Slider} from './Slider/Slider';
+export {BilateralSlider} from './Slider/Slider';
 export * from './Svg/Svg';

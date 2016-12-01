@@ -6,7 +6,7 @@ export default {
         getPath() {
             return '';
         },
-        childRouteNodeKeys: ['user', 'api', 'category', 'model', 'catalog', 'settings']
+        childRouteNodeKeys: ['user', 'api', 'category', 'model', 'catalog', 'settings', 'examples']
     },
     notFound: {
         getRoute(path = null) {
