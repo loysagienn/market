@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import style from './buildCssMap';
-import {Header, IndexPage, ModelList, PageNotFound, Model, Settings, Filters} from '../';
+import {Header, IndexPage, ModelList, PageNotFound, Model, Settings, Filters, Examples} from '../';
 import {routeKeys} from '../../common/router/router';
 import {createLogger} from '../../common/logger';
 import {configClassName} from '../../common/helpers';
@@ -71,6 +71,14 @@ export default class App extends Component {
                 return (
                     <div className={style.page}>
                         <Settings/>
+                    </div>
+                );
+
+            case routeKeys.examples:
+
+                return (
+                    <div className={style.page}>
+                        <Examples/>
                     </div>
                 );
 
