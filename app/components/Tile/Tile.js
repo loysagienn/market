@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import style from './buildCssMap';
 import {configClassName} from '../../common/helpers';
 
-export default function ({children, className, onClick, href, target, theme}) {
+function Tile({children, className, onClick, href, target, theme}) {
 
     className = configClassName(style.main, style[theme], className, {[style.canClick]: onClick || href});
 
@@ -31,3 +31,13 @@ function renderDiv(className, children, onClick) {
         </div>
     )
 }
+
+Tile.propTypes = {
+    className: PropTypes.string,
+    onClick: PropTypes.func,
+    href: PropTypes.string,
+    target: PropTypes.string,
+    theme: PropTypes.string
+};
+
+export default Tile;

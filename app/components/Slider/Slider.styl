@@ -1,3 +1,51 @@
 @import '../mixins.styl'
 json('../variables.json')
 
+.main
+    padding: 10px;
+
+.slider
+    position: relative;
+    height: 4px;
+    border-radius: 2px;
+    background-color: rgba(0,0,0,0.3);
+
+.filled
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-radius: 2px;
+    background-color: c-special;
+    transition: left 0.5s ease, right 0.5s ease;
+    &.filledActive
+        transition: none;
+
+.track
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    top: 0;
+    bottom: 0;
+
+.button
+    position: absolute
+    box-sizing: border-box;
+    background-clip: content-box;
+    top: 2px;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    margin-left: -10px;
+    margin-top: -10px;
+    background-color: c-special;
+    border: 5px solid transparent;
+    cursor: pointer;
+    &:hover
+        border: 5px solid rgba(0,0,0,0.1);
+    &.buttonNotActive
+        transition: left 0.5s ease;
+    &.buttonActive
+        border: 5px solid rgba(0,0,0,0.1);
