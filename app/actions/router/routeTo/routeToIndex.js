@@ -1,9 +1,9 @@
 import {
     ROUTE_LOAD_START, ROUTE_LOAD_DONE, ROUTE_LOAD_FAIL,
     CATEGORIES_LOAD_START, CATEGORIES_LOAD_DONE, CATEGORIES_LOAD_FAIL
-} from '../action-types';
-import {categoryChildrenLoaded, loadCategories} from '../../common/categoriesLoader';
-import {createLogger} from '../../common/logger';
+} from '../../action-types';
+import {categoryChildrenLoaded, loadCategories} from '../../../common/categoriesLoader';
+import {createLogger} from '../../../common/logger';
 
 const log = createLogger(module, {console: true});
 

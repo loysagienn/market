@@ -1,4 +1,4 @@
-import {stringifyQueryParams, parseQueryParams, getKeyByObject} from '../helpers';
+import {stringifyQueryParams, parseQueryParams, getKeyByObject, objectPropFilter} from '../helpers';
 
 export default {
     user: {
@@ -52,6 +52,8 @@ export default {
             return {categoryId, filterValues, filterKey};
         },
         getPath({categoryId, filterValues}) {
+            filterValues = objectPropFilter(filterValues, value => value);
+
             return `catalog-${categoryId + stringifyQueryParams(filterValues)}`;
         },
         childRouteNodeKeys: []

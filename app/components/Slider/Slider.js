@@ -13,11 +13,16 @@ export class BilateralSlider extends Component {
 
         this._dragSide = null;
         this._dragPosition = null;
+        this._dragValue = {};
         this._onDragHandler = event => this._onDrag(event);
         this._onDragEndHandler = event => this._onDragEnd(event);
+        this._needForceUpdate = false;
     }
 
     _onDragStart(event, side) {
+
+        event.preventDefault();
+
         window.addEventListener('mousemove', this._onDragHandler);
         window.addEventListener('mouseup', this._onDragEndHandler);
 
@@ -29,10 +34,13 @@ export class BilateralSlider extends Component {
         this._dragPosition = {
             start: this._getDragPositionPx(valueStart, trackWidth),
             end: this._getDragPositionPx(valueEnd, trackWidth)
-        }
+        };
     }
 
     _onDrag(event) {
+
+        event.preventDefault();
+
         const left = event.clientX - this._trackNode.getBoundingClientRect().left;
         const {trackWidth} = this;
         const dragPosition = this._dragPosition;
@@ -56,20 +64,60 @@ export class BilateralSlider extends Component {
             }
         }
 
-        this.forceUpdate();
+        this._needForceUpdate = true;
+
+        const {onMove} = this.props;
+
+        if (onMove) {
+            const newDragValue = {
+                valueStart: this._getValue(dragPosition.start, trackWidth),
+                valueEnd: this._getValue(dragPosition.end, trackWidth)
+            };
+            const dragValue = this._dragValue;
+
+            if (dragValue.valueStart !== newDragValue.valueStart || dragValue.valueEnd !== newDragValue.valueEnd) {
+                this._dragValue = newDragValue;
+                onMove(newDragValue)
+            }
+        }
+
+        if (this._needForceUpdate) {
+            this.forceUpdate();
+        }
     }
 
     _onDragEnd(event) {
+
+        event.preventDefault();
+
         window.removeEventListener('mousemove', this._onDragHandler);
         window.removeEventListener('mouseup', this._onDragEndHandler);
+        const {trackWidth} = this;
+        const dragPosition = this._dragPosition;
 
         this._dragSide = null;
         this._dragPosition = null;
+        this._dragValue = {};
 
-        this.forceUpdate();
+        this._needForceUpdate = true;
+
+        const {onChange} = this.props;
+
+        if (onChange) {
+            onChange({
+                valueStart: this._getValue(dragPosition.start, trackWidth),
+                valueEnd: this._getValue(dragPosition.end, trackWidth)
+            });
+        }
+
+        if (this._needForceUpdate) {
+            this.forceUpdate();
+        }
     }
 
     render() {
+
+        this._needForceUpdate = false;
 
         const {className} = this.props;
 
@@ -160,6 +208,9 @@ export class BilateralSlider extends Component {
     }
 
     _renderBtnEnd(dragPosition) {
+        if (this.props.preventEditEnd) {
+            return null;
+        }
 
         const dragSide = this._dragSide;
 
@@ -186,6 +237,12 @@ export class BilateralSlider extends Component {
         return this._trackNode ? this._trackNode.offsetWidth : 0;
     }
 
+    _getValue(position, trackWidth) {
+        const {minValue = 0, maxValue} = this.props;
+
+        return Math.round((position / trackWidth) * (maxValue - minValue) + minValue);
+    }
+
     _getDragPositionPx(value, trackWidth) {
         const {minValue = 0, maxValue} = this.props;
 
@@ -208,8 +265,8 @@ export default function Slider ({className, minValue, maxValue, value, onMove, o
             valueStart={minValue}
             valueEnd={value}
             preventEditStart={true}
-            onMove={onMove}
-            onChange={onChange}
+            onMove={({valueEnd}) => onMove(valueEnd)}
+            onChange={({valueEnd}) => onChange(valueEnd)}
             roundingPrecision={roundingPrecision}
         />
     );

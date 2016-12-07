@@ -45,32 +45,10 @@ export default function filters(state = {}, action) {
     return state;
 }
 
-function updateFilters(categoryFilters = {}, values = {}) {
+function updateFilters(categoryFilters = {}, newValues = {}) {
     categoryFilters = Object.assign({}, categoryFilters);
 
-    categoryFilters.values = Object.assign({}, categoryFilters.values);
-
-    Object.keys(values)
-        .forEach(
-            key => values[key] === null
-                ? delete categoryFilters.values[key]
-                : categoryFilters.values[key] = values[key]
-        );
-
-    return categoryFilters;
-}
-
-function updateFilter(categoryFilters = {}, {key, value}) {
-
-    categoryFilters = Object.assign({values: {}}, categoryFilters);
-
-    categoryFilters.values = Object.assign({}, categoryFilters.values);
-
-    if (value === null) {
-        delete categoryFilters.values[key];
-    } else {
-        categoryFilters.values[key] = value;
-    }
+    categoryFilters.values = newValues;
 
     return categoryFilters;
 }

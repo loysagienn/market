@@ -49,6 +49,15 @@ export function getKeyByObject(params) {
     return String(params);
 }
 
+export function objectPropFilter(obj, filterFunction) {
+    return Object.keys(obj).reduce((result, key) => {
+        if (filterFunction(obj[key])) {
+            return Object.assign(result, {[key]: obj[key]});
+        }
+        return result;
+    }, {});
+}
+
 export const immediate = (typeof setImmediate === 'function') ? setImmediate : func => Promise.resolve().then(func);
 
 export function getSettings(cookieSettings) {

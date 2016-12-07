@@ -105,14 +105,13 @@ export default class Filters extends Component {
 
         const {key} = filter;
 
-        const {routeToActualFilter, updateFilter, values} = this.props;
+        const {routeToFilter, values} = this.props;
 
         return (
             <FilterNumeric
                 filter={filter}
                 selected={values[key]}
-                updateFilter={updateFilter}
-                routeToActualFilter={routeToActualFilter}
+                routeToFilter={routeToFilter}
             />
         )
     }
@@ -121,16 +120,13 @@ export default class Filters extends Component {
 
         let {key, name} = filter;
 
-        const {routeToActualFilter, updateFilter, values} = this.props;
+        const {routeToFilter, values} = this.props;
 
         const checked = values[key];
 
         name = name.charAt(0).toUpperCase() + name.slice(1);
 
-        const onClick = () => {
-            updateFilter({[key]: !checked || null});
-            routeToActualFilter();
-        };
+        const onClick = () => routeToFilter({[key]: !checked || null});
 
         return (
             <div className={configClassName(style.filter, style.filterBool)}>
@@ -152,12 +148,11 @@ export default class Filters extends Component {
 
         const {key} = filter;
 
-        const {routeToActualFilter, updateFilter, values} = this.props;
+        const {routeToFilter, values} = this.props;
 
         return (
             <FilterEnum
-                routeToActualFilter={routeToActualFilter}
-                updateFilter={updateFilter}
+                routeToFilter={routeToFilter}
                 selectedItems={values[key]}
                 filter={filter}
             />

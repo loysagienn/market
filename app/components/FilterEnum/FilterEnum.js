@@ -16,15 +16,14 @@ export default class FilterEnum extends Component {
     }
 
     _toggleItem(valueId) {
-        const {routeToActualFilter, updateFilter, filter: {key}} = this.props;
+        const {routeToFilter, filter: {key}} = this.props;
 
         if (this._selectedItems[valueId]) {
             delete this._selectedItems[valueId];
         } else {
             this._selectedItems[valueId] = true;
         }
-        updateFilter({[key]: Object.keys(this._selectedItems).join(',') || null});
-        routeToActualFilter();
+        routeToFilter({[key]: Object.keys(this._selectedItems).join(',') || null});
     }
 
     render() {

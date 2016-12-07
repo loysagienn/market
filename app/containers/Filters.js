@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import {routeToActualFilter, updateFilter} from '../actions/actions';
+import {routeToFilter} from '../actions/actions';
 import Filters from '../components/Filters/Filters';
 
 function mapStateToProps(
@@ -19,8 +19,7 @@ function mapStateToProps(
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-    routeToActualFilter: params => dispatch(routeToActualFilter()),
-    updateFilter: filter => dispatch(updateFilter(filter))
+    routeToFilter: filter => dispatch(routeToFilter(filter))
 });
 
 export default connect(
