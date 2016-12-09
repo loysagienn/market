@@ -17,7 +17,6 @@ export default function renderHtml({html = '', initialState = {}} = {}) {
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
     <meta name="format-detection" content="address=no">
-    <link href='https://fonts.googleapis.com/css?family=Roboto&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="/market/build/app.css">
 </head>
 <body>
