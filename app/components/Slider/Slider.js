@@ -17,6 +17,42 @@ export class BilateralSlider extends Component {
         this._onDragHandler = event => this._onDrag(event);
         this._onDragEndHandler = event => this._onDragEnd(event);
         this._needForceUpdate = false;
+        this._roundingFactor = 1;
+        this._updateRoundingFactor(props);
+    }
+
+    componentWillReceiveProps(newProps) {
+        this._updateRoundingFactor(newProps);
+    }
+
+    _updateRoundingFactor(props) {
+
+        let roundingFactor = 1;
+
+        if (props.roundingPrecision) {
+            let roundingPrecision = props.roundingPrecision;
+
+            while (roundingPrecision-- > 0) roundingFactor = roundingFactor * 10;
+            while (roundingPrecision++ < 0) roundingFactor = roundingFactor * 0.1;
+        } else {
+            const {minValue = 0, maxValue} = this.props;
+
+            let valuesSpace = maxValue - minValue;
+
+            if (valuesSpace < 100) {
+                while (valuesSpace < 100) {
+                    roundingFactor = roundingFactor * 10;
+                    valuesSpace = valuesSpace * 10;
+                }
+            } else if (valuesSpace > 1000) {
+                while (valuesSpace > 1000) {
+                    roundingFactor = roundingFactor / 10;
+                    valuesSpace = valuesSpace / 10;
+                }
+            }
+        }
+
+        this._roundingFactor = roundingFactor;
     }
 
     _onDragStart(event, side) {
@@ -25,6 +61,8 @@ export class BilateralSlider extends Component {
 
         window.addEventListener('mousemove', this._onDragHandler);
         window.addEventListener('mouseup', this._onDragEndHandler);
+        window.addEventListener('touchmove', this._onDragHandler);
+        window.addEventListener('touchend', this._onDragEndHandler);
 
         const {minValue = 0, maxValue} = this.props;
         const {valueStart = minValue, valueEnd = maxValue} = this.props;
@@ -40,29 +78,14 @@ export class BilateralSlider extends Component {
     _onDrag(event) {
 
         event.preventDefault();
-
-        const left = event.clientX - this._trackNode.getBoundingClientRect().left;
         const {trackWidth} = this;
-        const dragPosition = this._dragPosition;
-        const newPosition = Math.min(Math.max(left, 0), trackWidth);
 
-        if (this._dragSide === dragSides.start) {
-            if (newPosition > dragPosition.end) {
-                this._dragSide = dragSides.end;
-                dragPosition.start = dragPosition.end;
-                dragPosition.end = newPosition;
-            } else {
-                dragPosition.start = newPosition;
-            }
-        } else {
-            if (newPosition < dragPosition.start) {
-                this._dragSide = dragSides.start;
-                dragPosition.end = dragPosition.start;
-                dragPosition.start = newPosition;
-            } else {
-                dragPosition.end = newPosition;
-            }
-        }
+        const {clientX} = event.touches ? event.touches[0] : event;
+
+        const left = Math.round(clientX - this._trackNode.getBoundingClientRect().left);
+        this._updateDragPosition(left, trackWidth);
+
+        const dragPosition = this._dragPosition;
 
         this._needForceUpdate = true;
 
@@ -92,6 +115,9 @@ export class BilateralSlider extends Component {
 
         window.removeEventListener('mousemove', this._onDragHandler);
         window.removeEventListener('mouseup', this._onDragEndHandler);
+        window.removeEventListener('touchmove', this._onDragHandler);
+        window.removeEventListener('touchend', this._onDragEndHandler);
+
         const {trackWidth} = this;
         const dragPosition = this._dragPosition;
 
@@ -113,6 +139,60 @@ export class BilateralSlider extends Component {
         if (this._needForceUpdate) {
             this.forceUpdate();
         }
+    }
+
+    _updateDragPosition(left, trackWidth) {
+        const dragPosition = this._dragPosition;
+        const newPosition = Math.min(Math.max(left, 0), trackWidth);
+
+        if (this._dragSide === dragSides.start) {
+            if (newPosition > dragPosition.end) {
+                this._dragSide = dragSides.end;
+                dragPosition.start = dragPosition.end;
+                dragPosition.end = newPosition;
+            } else {
+                dragPosition.start = newPosition;
+            }
+        } else {
+            if (newPosition < dragPosition.start) {
+                this._dragSide = dragSides.start;
+                dragPosition.end = dragPosition.start;
+                dragPosition.start = newPosition;
+            } else {
+                dragPosition.end = newPosition;
+            }
+        }
+    }
+
+    _getValue(position, trackWidth) {
+
+        const {minValue = 0, maxValue} = this.props;
+
+        if (position === 0) {
+            return minValue;
+        }
+
+        if (position === trackWidth) {
+            return maxValue;
+        }
+
+        let value = (position / trackWidth) * (maxValue - minValue) + minValue;
+
+        value = Math.round(value * this._roundingFactor) / this._roundingFactor;
+
+        return Math.max(Math.min(value, maxValue), minValue);
+    }
+
+    _getDragPositionPx(value, trackWidth) {
+        const {minValue = 0, maxValue} = this.props;
+
+        return (value - minValue) / (maxValue - minValue) * trackWidth;
+    }
+
+    _getDragPositionPercent(value) {
+        const {minValue = 0, maxValue} = this.props;
+
+        return (value - minValue) / (maxValue - minValue) * 100;
     }
 
     render() {
@@ -200,6 +280,7 @@ export class BilateralSlider extends Component {
                     )
                 }
                 onMouseDown={event => this._onDragStart(event, dragSides.start)}
+                onTouchStart={event => this._onDragStart(event, dragSides.start)}
                 style={{
                     left: dragPosition.start
                 }}
@@ -226,6 +307,7 @@ export class BilateralSlider extends Component {
                     )
                 }
                 onMouseDown={event => this._onDragStart(event, dragSides.end)}
+                onTouchStart={event => this._onDragStart(event, dragSides.end)}
                 style={{
                     left: dragPosition.end
                 }}
@@ -234,25 +316,7 @@ export class BilateralSlider extends Component {
     }
 
     get trackWidth() {
-        return this._trackNode ? this._trackNode.offsetWidth : 0;
-    }
-
-    _getValue(position, trackWidth) {
-        const {minValue = 0, maxValue} = this.props;
-
-        return Math.round((position / trackWidth) * (maxValue - minValue) + minValue);
-    }
-
-    _getDragPositionPx(value, trackWidth) {
-        const {minValue = 0, maxValue} = this.props;
-
-        return (value - minValue) / (maxValue - minValue) * trackWidth;
-    }
-
-    _getDragPositionPercent(value) {
-        const {minValue = 0, maxValue} = this.props;
-
-        return (value - minValue) / (maxValue - minValue) * 100;
+        return this._trackNode ? Math.round(this._trackNode.offsetWidth) : 0;
     }
 }
 

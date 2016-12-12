@@ -21,13 +21,12 @@ export default class FilterNumeric extends Component {
             return;
         }
 
-
         let {filter: {minValue, maxValue}} = this.props;
         let [valueStart, valueEnd] = this._sliderValue;
 
         let value;
 
-        if (valueStart === Math.round(+minValue) && valueEnd === Math.round(+maxValue)) {
+        if (valueStart === +minValue && valueEnd === +maxValue) {
             value = null;
         } else {
             value = this._sliderValue.join(',');
