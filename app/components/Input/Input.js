@@ -105,7 +105,7 @@ export default class Input extends Component {
 
         this._needForeceUpdate = false;
 
-        const inputMode = type === types.number ? 'number' : '';
+        const inputMode = type === types.number ? 'numeric' : '';
 
         return (
             <Focusable
