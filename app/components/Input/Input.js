@@ -105,7 +105,7 @@ export default class Input extends Component {
 
         this._needForeceUpdate = false;
 
-        const pattern = type === types.number ? '\\d*' : '.*';
+        const inputMode = type === types.number ? 'number' : '';
 
         return (
             <Focusable
@@ -116,8 +116,8 @@ export default class Input extends Component {
             >
                 <input
                     type="text"
+                    inputMode={inputMode}
                     className={configClassName(style.input)}
-                    pattern={pattern}
                     value={value}
                     onChange={this._onInputHandler}
                     onFocus={event => this._node.focus()}
