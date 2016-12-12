@@ -115,6 +115,7 @@ export default class Input extends Component {
                 onBlur={this._onBlurHandler}
             >
                 <input
+                    type="text"
                     className={configClassName(style.input)}
                     pattern={pattern}
                     value={value}
