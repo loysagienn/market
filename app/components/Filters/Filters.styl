@@ -7,11 +7,8 @@ json('../variables.json')
     right: 0;
     top: 0;
     bottom: 0;
-    box-sizing: border-box;
-    padding: 10px;
-    overflow: auto;
     &.focused
-        +maxWidth(850px)
+        +maxWidth(800px)
             position: fixed;
             left: 0;
             top: 50px;
@@ -28,6 +25,20 @@ json('../variables.json')
         .loadingSvg
             fill: c-special
 
+.filters
+    box-sizing: border-box;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 10px;
+    bottom: 10px;
+    overflow: auto;
+    padding: 0 10px;
+    +maxWidth(800px)
+        bottom: 60px;
+
+.filtersTile
+    padding: 5px 0;
 
 .filterBtn
     display: none;
@@ -46,13 +57,22 @@ json('../variables.json')
         fill: c-white;
 
 .buttons
-    text-align: center;
-    padding: 10px 0;
+    display: none;
+    position: absolute;
+    box-sizing: border-box;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 60px;
+    padding: 0 10px;
+    justify-content: center;
+    align-items: center;
+    +maxWidth(800px)
+        display: flex;
     .button
+        padding: 10px 15px;
         min-width: 120px;
-
-.filters
-    padding: 5px 0;
+        width: 100%;
 
 .filterWrapper
     box-sizing: border-box;

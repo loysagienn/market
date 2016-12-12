@@ -19,6 +19,7 @@ export default class Filters extends Component {
             isFocused: false
         }
     }
+
     render() {
 
         const {loading} = this.props;
@@ -31,9 +32,24 @@ export default class Filters extends Component {
                 onBlur={event => this.setState({isFocused: false})}
                 ref={node => this._mainNode = node}
             >
-                <Tile className={style.filters}>
-                    {loading ? renderLoading() : this._renderFilters()}
-                </Tile>
+                <div className={style.filters}>
+                    <Tile className={style.filtersTile}>
+                        {loading ? renderLoading() : this._renderFilters()}
+                    </Tile>
+                </div>
+                <div
+                    className={style.buttons}
+                >
+                    <Button
+                        className={style.button}
+                        onClick={event => {
+                            event.nativeEvent.preventFocus = true;
+                            this._mainNode.blur();
+                        }}
+                    >
+                        OK
+                    </Button>
+                </div>
                 <div className={style.filterBtn}>
                     <SvgFilter className={style.filterBtnSvg}/>
                 </div>
@@ -48,19 +64,6 @@ export default class Filters extends Component {
         return (
             <div>
                 {filters.map(filter => this._renderFilter(filter))}
-                <div
-                    className={style.buttons}
-                >
-                    <Button
-                        className={style.button}
-                        onClick={event => {
-                            event.nativeEvent.preventFocus = true;
-                            this._mainNode.blur();
-                        }}
-                    >
-                        OK
-                    </Button>
-                </div>
             </div>
         );
     }
