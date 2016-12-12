@@ -105,7 +105,7 @@ export default class Input extends Component {
 
         this._needForeceUpdate = false;
 
-        const pattern = type === types.number ? /[0-9\.]*/ : /.*/;
+        const pattern = type === types.number ? /\d*/ : /.*/;
 
         return (
             <Focusable
