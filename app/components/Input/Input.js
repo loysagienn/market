@@ -99,11 +99,13 @@ export default class Input extends Component {
     }
 
     render() {
-        const {className, onFocus} = this.props;
+        const {className, onFocus, type} = this.props;
 
         const value = this.value;
 
         this._needForeceUpdate = false;
+
+        const pattern = type === types.number ? /[0-9\.]*/ : /.*/;
 
         return (
             <Focusable
@@ -113,8 +115,8 @@ export default class Input extends Component {
                 onBlur={this._onBlurHandler}
             >
                 <input
-                    ref={input => this._input = input}
                     className={configClassName(style.input)}
+                    pattern={pattern}
                     value={value}
                     onChange={this._onInputHandler}
                     onFocus={event => this._node.focus()}
