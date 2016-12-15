@@ -1,0 +1,31 @@
+@import '../mixins.styl'
+json('../variables.json')
+
+.main
+    &:hover
+        background-color: c-gray-f8;
+    &.isFocused
+        background-color: c-gray-f8;
+
+.name
+    position: relative;
+    padding: 8px 10px;
+    line-height: 24px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    &.isFocused
+        background-color: c-special
+        color: c-white
+    .nameIcon
+        position: absolute;
+        right: 4px;
+        top: 8px;
+        &.arrowUpIcon
+            fill: c-white
+        &.dotIcon
+            fill: c-special
+
+.filterContent
+    padding: 10px;
+    display: block;
+    box-shadow: inset 0 0 5px 0 rgba(0,0,0,0.5);

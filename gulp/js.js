@@ -1,5 +1,6 @@
 const gulp = require('gulp');
 const babel = require('gulp-babel');
+const changed = require('gulp-changed');
 
 
 const src = {
@@ -14,6 +15,7 @@ const src = {
 gulp.task('js', () =>
     gulp
         .src(src.js, {base: src.base})
+        .pipe(changed(src.build))
         .pipe(babel({
             presets: ['react'],
             plugins: ['transform-es2015-modules-commonjs']

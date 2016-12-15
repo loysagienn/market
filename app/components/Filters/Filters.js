@@ -1,28 +1,27 @@
 import React, {Component} from 'react';
 import style from './buildCssMap';
 import {configClassName} from '../../common/helpers';
-import {Loading, Input, Tile, Checkbox, Focusable, SvgFilter, Button, FilterEnum, FilterNumeric} from '../';
+import {Loading, Tile, Focusable, SvgFilter, Button, FilterEnum, FilterNumeric, FilterBool, FilterBox} from '../';
 import {createLogger} from '../../common/logger';
 
 const log = createLogger(module, {console: true});
 
-const filterTypes = {
-    NUMERIC: 'NUMERIC',
-    ENUM: 'ENUMERATOR',
-    BOOL: 'BOOL'
-};
 
 export default class Filters extends Component {
     constructor(props) {
         super(props);
         this.state = {
             isFocused: false
+        };
+
+        this._filterComponents = {
+            NUMERIC: FilterNumeric,
+            ENUMERATOR: FilterEnum,
+            BOOL: FilterBool
         }
     }
 
     render() {
-
-        const {loading} = this.props;
         const {isFocused} = this.state;
 
         return (
@@ -32,134 +31,87 @@ export default class Filters extends Component {
                 onBlur={event => this.setState({isFocused: false})}
                 ref={node => this._mainNode = node}
             >
-                <div className={style.filters}>
-                    <Tile className={style.filtersTile}>
-                        {loading ? renderLoading() : this._renderFilters()}
-                    </Tile>
-                </div>
-                <div
-                    className={style.buttons}
-                >
-                    <Button
-                        className={style.button}
-                        onClick={event => {
-                            event.nativeEvent.preventFocus = true;
-                            this._mainNode.blur();
-                        }}
-                    >
-                        OK
-                    </Button>
-                </div>
-                <div className={style.filterBtn}>
-                    <SvgFilter className={style.filterBtnSvg}/>
-                </div>
+
+                {this._renderFilters()}
+
+                {this._renderButtons()}
+
+                {renderOpenFiltersBtn()}
+
             </Focusable>
         )
     }
 
-    _renderFilters() {
-
-        const {filters} = this.props;
+    _renderButtons() {
 
         return (
-            <div>
-                {filters.map(filter => this._renderFilter(filter))}
+            <div className={style.buttons}>
+                <Button
+                    className={style.button}
+                    onClick={event => {
+                        event.nativeEvent.preventFocus = true;
+                        this._mainNode.blur();
+                    }}
+                >
+                    OK
+                </Button>
+            </div>
+        );
+    }
+
+    _renderFilters() {
+
+        const {filters, loading} = this.props;
+
+        return (
+            <div className={style.filters}>
+                <Tile className={style.filtersTile}>
+                    {
+                        loading
+                            ? renderLoading()
+                            : filters.map(filter => this._renderFilter(filter))
+                    }
+                </Tile>
             </div>
         );
     }
 
     _renderFilter(filter) {
 
-        const {id} = filter;
+        const {id, key, name} = filter;
 
+        const {values} = this.props;
+        
         return (
-            <div
+            <FilterBox
                 key={id}
-                className={style.filterWrapper}
+                name={name.charAt(0).toUpperCase() + name.slice(1)}
+                active={key in values}
             >
                 {
                     this._renderFilterNode(filter)
                 }
-            </div>
-        )
+            </FilterBox>
+        );
     }
 
     _renderFilterNode(filter) {
-        switch (filter.type) {
-            case filterTypes.NUMERIC:
+        const {key} = filter;
+        const {routeToFilter, values} = this.props;
 
-                return this._renderNumeric(filter);
+        if (filter.type in this._filterComponents) {
+            const FilterComponent = this._filterComponents[filter.type];
 
-            case filterTypes.BOOL:
-
-                return this._renderBool(filter);
-
-            case filterTypes.ENUM:
-
-                return this._renderEnum(filter);
-
-            default:
-
-                return `${filter.name} ${filter.type}`;
+            return (
+                <FilterComponent
+                    filter={filter}
+                    selected={values[key]}
+                    routeToFilter={routeToFilter}
+                />
+            );
         }
-    }
 
-    _renderNumeric(filter) {
-
-        const {key} = filter;
-
-        const {routeToFilter, values} = this.props;
-
-        return (
-            <FilterNumeric
-                filter={filter}
-                selected={values[key]}
-                routeToFilter={routeToFilter}
-            />
-        )
-    }
-
-    _renderBool(filter) {
-
-        let {key, name} = filter;
-
-        const {routeToFilter, values} = this.props;
-
-        const checked = values[key];
-
-        name = name.charAt(0).toUpperCase() + name.slice(1);
-
-        const onClick = () => routeToFilter({[key]: !checked || null});
-
-        return (
-            <div className={configClassName(style.filter, style.filterBool)}>
-                <div
-                    className={style.filterName}
-                    onClick={onClick}
-                >
-                    <Checkbox
-                        checked={checked}
-                        className={style.checkbox}
-                    />
-                    {name}
-                </div>
-            </div>
-        );
-    }
-
-    _renderEnum(filter) {
-
-        const {key} = filter;
-
-        const {routeToFilter, values} = this.props;
-
-        return (
-            <FilterEnum
-                routeToFilter={routeToFilter}
-                selectedItems={values[key]}
-                filter={filter}
-            />
-        );
+        return `Возможность редактирования фильтра ${filter.type} еще не реализована`;
     }
 }
 
@@ -170,4 +122,12 @@ function renderLoading() {
             svgClassName={style.loadingSvg}
         />
     )
+}
+
+function renderOpenFiltersBtn() {
+    return (
+        <div className={style.filterBtn}>
+            <SvgFilter className={style.filterBtnSvg}/>
+        </div>
+    );
 }
