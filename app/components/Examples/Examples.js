@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import style from './buildCssMap';
 import {Tile, BilateralSlider, Slider, Input} from '../';
+import {immediate} from '../../common/helpers';
 
 export default class Examples extends Component {
     constructor(props) {
@@ -12,7 +13,8 @@ export default class Examples extends Component {
     }
 
     componentDidMount() {
-        this._input.focus();
+        immediate(() => this._input.focus());
+
     }
 
     render() {
