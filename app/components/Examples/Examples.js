@@ -38,11 +38,11 @@ export default class Examples extends Component {
                         onChange={event => console.log('onChange', event)}
                     />
                 </Tile>
-                <div className={style.input}>
+                <Tile className={style.input}>
                     <Input
                         ref={input => this._input = input}
                     />
-                </div>
+                </Tile>
             </div>
         );
     }
