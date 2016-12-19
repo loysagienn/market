@@ -98,6 +98,10 @@ export default class Input extends Component {
         }
     }
 
+    focus() {
+        this._input.focus();
+    }
+
     render() {
         const {className, onFocus, type} = this.props;
 
@@ -115,6 +119,7 @@ export default class Input extends Component {
                 onBlur={this._onBlurHandler}
             >
                 <input
+                    ref={input => this._input = input}
                     type="text"
                     inputMode={inputMode}
                     className={configClassName(style.input)}
