@@ -13,7 +13,7 @@ export default class Examples extends Component {
     }
 
     componentDidMount() {
-        immediate(() => this._input.focus());
+        setTimeout(() => this._input.focus(), 0);
 
     }
 
