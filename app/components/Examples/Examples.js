@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import style from './buildCssMap';
-import {Tile, BilateralSlider, Slider} from '../';
+import {Tile, BilateralSlider, Slider, Input} from '../';
 
 export default class Examples extends Component {
     constructor(props) {
@@ -9,6 +9,10 @@ export default class Examples extends Component {
             valueStart: 2,
             valueEnd: 20
         }
+    }
+
+    componentDidMount() {
+        this._input.focus();
     }
 
     render() {
@@ -34,6 +38,11 @@ export default class Examples extends Component {
                         onChange={event => console.log('onChange', event)}
                     />
                 </Tile>
+                <div className={style.input}>
+                    <Input
+                        ref={input => this._input = input}
+                    />
+                </div>
             </div>
         );
     }

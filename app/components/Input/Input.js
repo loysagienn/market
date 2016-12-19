@@ -63,6 +63,9 @@ export default class Input extends Component {
             this.forceUpdate();
         }
     }
+    focus() {
+        this._input.focus();
+    }
     render() {
         const {className, onFocus, onBlur, value} = this.props;
 
