@@ -102,6 +102,10 @@ export default class Input extends Component {
         this._input.focus();
     }
 
+    click() {
+        this._input.click();
+    }
+
     render() {
         const {className, onFocus, type} = this.props;
 
