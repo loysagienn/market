@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import style from './buildCssMap';
-import {Tile, BilateralSlider, Slider, Input} from '../';
+import {Tile, BilateralSlider, Slider, Input, RadioButton} from '../';
 import {immediate} from '../../common/helpers';
 
 export default class Examples extends Component {
@@ -41,7 +41,19 @@ export default class Examples extends Component {
                 </Tile>
                 <Tile className={style.input}>
                     <Input
+                        value=""
+                        onChange={event => console.log(event)}
                         ref={input => this._input = input}
+                    />
+                </Tile>
+                <Tile className={style.radioButton}>
+                    <RadioButton
+                        buttons={[
+                            {text: 'Неважно', id: 1, checked: true},
+                            {text: 'Да', id: 2},
+                            {text: 'Нет', id: 3}
+                        ]}
+                        onClick={(event, id) => console.log(id)}
                     />
                 </Tile>
             </div>

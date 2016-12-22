@@ -1,0 +1,23 @@
+@import '../mixins.styl'
+json('../variables.json')
+
+.main
+    display: flex;
+    justify-content: flex-start;
+
+.button
+    box-sizing: border-box;
+    border: 1px solid c-gray-d0;
+    padding-left: 1px;
+    &:first-child
+        border-radius: 3px 0 0 3px;
+        border-left-width: 1px;
+        margin-left: 0;
+        padding-left: 0;
+    &:last-child
+        border-radius: 0 3px 3px 0;
+    &.checked
+        border-color: c-special;
+        background-color: c-special;
+        border-right-width: 0;
+        padding-right: 1px;

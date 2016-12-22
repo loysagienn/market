@@ -30,4 +30,5 @@ export {default as FilterBool} from './FilterBool/FilterBool';
 export {default as Slider} from './Slider/Slider';
 export {default as BilateralSlider} from './BilateralSlider/BilateralSlider';
 export {default as FilterBox} from './FilterBox/FilterBox';
+export {default as RadioButton} from './RadioButton/RadioButton';
 export * from './Svg/Svg';
