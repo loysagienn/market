@@ -8,7 +8,8 @@ export default class Examples extends Component {
         super(props);
         this.state = {
             valueStart: 2,
-            valueEnd: 20
+            valueEnd: 20,
+            checkedButtonId: null
         }
     }
 
@@ -17,6 +18,8 @@ export default class Examples extends Component {
     }
 
     render() {
+        const {checkedButtonId} = this.state;
+
         return (
             <div className={style.main}>
                 <Tile className={style.sliderTile}>
@@ -49,11 +52,11 @@ export default class Examples extends Component {
                 <Tile className={style.radioButton}>
                     <RadioButton
                         buttons={[
-                            {text: 'Неважно', id: 1, checked: true},
-                            {text: 'Да', id: 2},
-                            {text: 'Нет', id: 3}
+                            {text: 'Неважно', id: 1, checked: checkedButtonId === 1},
+                            {text: 'Да', id: 2, checked: checkedButtonId === 2},
+                            {text: 'Нет', id: 3, checked: checkedButtonId === 3}
                         ]}
-                        onClick={(event, id) => console.log(id)}
+                        onClick={(event, id) => this.setState({checkedButtonId: id})}
                     />
                 </Tile>
             </div>

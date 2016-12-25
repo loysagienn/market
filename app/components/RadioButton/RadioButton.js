@@ -16,16 +16,18 @@ function renderButton({text, id, checked}, onClick) {
     return (
         <div
             key={id}
-            className={configClassName(style.button, {[style.checked]: checked})}
+            className={configClassName(style.buttonWrapper, {[style.checked]: checked})}
             onClick={event => onClick(event, id)}
         >
-            {text}
+            <div className={style.button}>
+                {text}
+            </div>
         </div>
     );
 }
 
-// RadioButton.propTypes = {
-//     className: PropTypes.string,
-//     buttons: PropTypes.array.required,
-//     onClick: PropTypes.func.required
-// };
+RadioButton.propTypes = {
+    className: PropTypes.string,
+    buttons: PropTypes.array.isRequired,
+    onClick: PropTypes.func.isRequired
+};
