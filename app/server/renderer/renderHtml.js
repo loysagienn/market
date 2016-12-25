@@ -1,4 +1,8 @@
+import path from 'path';
 import config from '../../config';
+
+const cssBundleUrl = path.join(config.bundlePath, 'app.css');
+const jsBundleUrl = path.join(config.bundlePath, 'app.js');
 
 
 export default function renderHtml({html = '', initialState = {}} = {}) {
@@ -17,7 +21,7 @@ export default function renderHtml({html = '', initialState = {}} = {}) {
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
     <meta name="format-detection" content="address=no">
-    <link rel="stylesheet" href="/market/build/app.css">
+    <link rel="stylesheet" href="${cssBundleUrl}">
 </head>
 <body>
     
@@ -28,7 +32,7 @@ export default function renderHtml({html = '', initialState = {}} = {}) {
 <script src = "${config.reactUrl}"></script>
 <script src = "${config.reactDomUrl}"></script>
 <script src = "${config.reactReduxUrl}"></script>
-<script src = "/market/build/app.js"></script>
+<script src = "${jsBundleUrl}"></script>
 
 </body>
 </html>`;

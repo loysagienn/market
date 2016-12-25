@@ -10,7 +10,7 @@ module.exports = {
         app: '../build/client/development.js'
     },
     output: {
-        path: path.join(config.staticDir, 'market/build'),
+        path: path.join(config.staticDir, config.bundlePath),
         publicPath: '/market/build/',
         filename: '[name].js',
         chunkFilename: '[id].js',
