@@ -4,15 +4,14 @@ import {getRouteByPath, routeKeys} from '../common/router/router';
 import {handleApiCall} from './api/api';
 const log = createLogger(module, {console: true, fileName: 'main'});
 
-export function handleRequest(req, res) {
 
-    const route = getRouteByPath(req.originalUrl);
+export function handleRequest({path, ip, cookies}) {
+
+    const route = getRouteByPath(path);
 
     if (route.key === routeKeys.api) {
-        handleApiCall(route.childRoute, req, res);
-        return;
+        return handleApiCall(route.childRoute, {ip});
     }
 
-    render(route, req, res);
-
+    return render(route, {ip, cookies});
 }

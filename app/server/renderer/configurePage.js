@@ -18,11 +18,11 @@ import {getSettings} from '../../common/helpers';
 const log = createLogger(module, {console: true});
 
 
-export default function configurePage(route, req) {
+export default function configurePage(route, {ip, cookies}) {
 
     return new Promise(resolve => {
 
-        const settings = getSettingsFromCookie(req);
+        const settings = getSettingsFromCookie(cookies);
 
         const {serverRenderingOn, preloadDataOnServer} = settings;
 
@@ -32,7 +32,7 @@ export default function configurePage(route, req) {
 
         const store = createStore(
             reducers,
-            {api: createPageApi(req), settings},
+            {api: createPageApi(ip), settings},
             applyMiddleware(batchThunk, crashReporter)
         );
 
@@ -74,13 +74,13 @@ export default function configurePage(route, req) {
     })
 }
 
-function createPageApi(req) {
+function createPageApi(ip) {
 
     const pageApi = createApi();
 
     addMethods(pageApi, marketApiMethods.reduce((methods, name) => {
 
-        methods[name] = params => api[name]({params, ip: req.ip});
+        methods[name] = params => api[name]({params, ip});
 
         return methods;
 
@@ -89,7 +89,7 @@ function createPageApi(req) {
     return pageApi;
 }
 
-function getSettingsFromCookie({cookies: {settings} = {}}) {
+function getSettingsFromCookie({settings} = {}) {
     if (!settings) {
         return DEFAULT_SETTINGS;
     }

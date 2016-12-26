@@ -16,26 +16,24 @@ const defaultErrors = {
     }
 };
 
-export default function handleApiCall(route, req, res) {
-
-    res.setHeader('Content-Type', 'application/json');
+export default (route, {ip}) => new Promise(resolve => {
 
     if (route === null) {
-        sendNotFound(res);
+        sendNotFound(resolve);
         return;
     }
 
     const key = getApiKey(route);
 
     if (!methodExists(api, key)) {
-        sendNotFound(res);
+        sendNotFound(resolve);
         return;
     }
 
-    api[key](getMethodParams(route, req))
-        .then(data => sendData(res, data))
-        .catch((errors, code = 500) => sendError(res, errors, code));
-}
+    api[key](getMethodParams(route, ip))
+        .then(data => sendData(resolve, data))
+        .catch((errors, code = 500) => sendError(resolve, errors, code));
+});
 
 function getApiKey(route) {
 
@@ -49,32 +47,43 @@ function getApiKey(route) {
     return route.key;
 }
 
-function getMethodParams({key, queryParams: params}, req) {
+function getMethodParams({key, queryParams: params}, ip) {
     switch(key) {
 
         case routeKeys.marketApiMethod:
 
-            return {params, ip: req.ip};
+            return {params, ip};
     }
 
     return params;
 }
 
-function sendNotFound(res) {
-    sendError(res, [defaultErrors.methodNotFond.description], defaultErrors.methodNotFond.code);
+function sendNotFound(resolve) {
+    sendError(resolve, [defaultErrors.methodNotFond.description], defaultErrors.methodNotFond.code);
 }
 
-function sendData(res, data) {
+function sendData(resolve, data) {
     try {
-        const dataStr = JSON.stringify({result: data});
-        res.end(dataStr);
+        const body = JSON.stringify({result: data});
+        resolve({
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body,
+            code: 200
+        });
     } catch (error) {
         log.error(error);
-        sendError(res, [defaultErrors.serverError], 500);
+        sendError(resolve, [defaultErrors.serverError], 500);
     }
 }
 
-function sendError(res, errors, code) {
-    res.status(code || 500);
-    res.end(JSON.stringify({errors}));
+function sendError(resolve, errors, code) {
+    resolve({
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({errors}),
+        code: code || 500
+    });
 }
