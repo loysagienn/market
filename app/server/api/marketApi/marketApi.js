@@ -5,9 +5,11 @@ import config from '../../../config';
 import {marketApiMethods} from '../../../common/router/router';
 
 const marketApiCacheTimeouts = {
-    getCategoryChildren: 1000 * 60 * 60,
-    getCategoryInfo: 1000 * 60 * 60,
-    getCategoryFilters: 1000 * 60 * 60
+    getCategoryChildren: 1000 * 60 * 10,
+    getCategoryInfo: 1000 * 60 * 10,
+    getCategoryFilters: 1000 * 60 * 10,
+    getModels: 1000 * 60 * 10,
+    getModelInfo: 1000 * 60 * 10
 };
 
 const request = config.isProdMode ? requestProd : requestDev;

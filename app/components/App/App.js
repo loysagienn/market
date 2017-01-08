@@ -14,7 +14,7 @@ export default class App extends Component {
 
     render() {
 
-        log.custom('render app', 'color: #009688;');
+        // log.custom('render app', 'color: #009688;');
 
         const {routeTo} = this.props;
 
