@@ -20,6 +20,7 @@ setLogger((module, options = {console: true}) => {
         transports.push(
             new winston.transports.Console({
                 colorize: true,
+                timestamp: true,
                 level: 'debug',
                 label: 'market: ' + filePath
             })
