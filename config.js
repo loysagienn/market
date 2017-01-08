@@ -12,7 +12,7 @@ module.exports = process.env.NODE_ENV === 'development'
 {
     privateConfig,
     isDevMode:        true,
-    staticDir:        path.join(__dirname, '../NodeServer/public'),
+    staticDir:        path.join(__dirname, '../server/public'),
     bundlePath:       '/market/build',
     babelPolyfillUrl: '/vendor/babel-polyfill.js',
     reactUrl:         '/vendor/react.js',
@@ -26,7 +26,7 @@ module.exports = process.env.NODE_ENV === 'development'
 {
     privateConfig,
     isProdMode:       true,
-    staticDir:        path.join(__dirname, '../NodeServer/public'),
+    staticDir:        path.join(__dirname, '../server/public'),
     bundlePath:       '/market/build',
     babelPolyfillUrl: 'https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.8.0/polyfill.min.js',
     reactUrl:         'https://cdnjs.cloudflare.com/ajax/libs/react/15.4.1/react.min.js',

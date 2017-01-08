@@ -3,7 +3,7 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var config = require('../config');
 
-
+console.log(path.join(config.staticDir, config.bundlePath));
 module.exports = {
     context: __dirname,
     entry: {

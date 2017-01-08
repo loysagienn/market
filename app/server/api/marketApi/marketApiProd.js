@@ -79,7 +79,7 @@ function makeRequest({options, resolve, reject}) {
 
     });
 
-    request.on('error', error => reject(['send request error'], 500));
+    request.on('error', error => reject([error], 500));
 
     request.end();
 }
